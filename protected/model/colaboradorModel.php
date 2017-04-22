@@ -38,9 +38,9 @@ class ColaboradorModel extends Conexao {
         }
         
         if($quantidadecpf >= 1){
-            echo "<script>alert('Este CPF já encontra-se cadastrado na base de dados! Favor informe outro CPF');</script>";
+            echo "<script>alert('CPF já cadastrado! Favor informe outro CPF');</script>";
         }else if($quantidadeemail >= 1){
-            echo "<script>alert('Este E-mail já encontra-se cadastrado na base de dados! Favor informe outro E-mail');</script>";
+            echo "<script>alert('CPF já cadastrado! Favor informe outro E-mail');</script>";
         }else{ 
             $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade) "
                     . "          VALUES(:nome, :sobrenome, '$datanascimento', '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade)";
