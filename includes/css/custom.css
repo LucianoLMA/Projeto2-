@@ -1,0 +1,31 @@
+.header {
+    background-color: #3D5B99;
+    border-top-color: #3D5B99 !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar.navbar-default {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin: 10px 0 15px;
+    border-color: transparent;
+    background-color: transparent;
+    font-weight: 400;
+}
+
+.subfooter{
+    background-color: #3D5B99;
+    border-top: 1px solid #888;
+}
+
+.white{
+    color: #fff !important;
+}
+
+.nav-pills > li > a {
+    color: #d4d4d4;
+}
