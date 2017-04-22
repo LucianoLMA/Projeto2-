@@ -66,7 +66,7 @@ class CidadeController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível excluir a Cidade.
+                    Não foi possível excluir a Cidade!
                   </div>';
         }
         $this->listar();

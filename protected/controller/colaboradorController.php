@@ -75,7 +75,7 @@ class ColaboradorController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível excluir o Colaborador.
+                    Não foi possível excluir o Colaborador!
                   </div>';
         }
         $this->listar();

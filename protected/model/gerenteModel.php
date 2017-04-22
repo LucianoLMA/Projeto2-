@@ -37,9 +37,9 @@ class GerenteModel extends Conexao {
         }
         
         if($quantidadecpf >= 1){
-            echo "<script>alert('Este CPF já encontra-se cadastrado na base de dados! Favor informe outro CPF');</script>";
+            echo "<script>alert('CPF já cadastrado! Favor informe outro CPF');</script>";
         }else if($quantidadeemail >= 1){
-            echo "<script>alert('Este E-mail já encontra-se cadastrado na base de dados! Favor informe outro E-mail');</script>";
+            echo "<script>alert('E-mail já cadastrado! Favor informe outro E-mail');</script>";
         }else{
             //CPF nao cadastrado, insere o registro
             $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade) "
