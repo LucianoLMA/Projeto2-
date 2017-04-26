@@ -1,5 +1,5 @@
 <?php
-require_once './protected/libs/controlador.php';
+require_once './protected/libs/controlador.php';// teste
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
