@@ -9,9 +9,11 @@ class CidadeModel extends Conexao {
     public function inserir(array $dados) {
         $nomecidade = $_POST['nome'];
         //Verifica se a cidade cadastrada ja existe
-        $consultacidade = "select count(*) as quantidadecidade from cidade where nome = '$nomecidade'";
+        $consultacidade = "select count(*) as quantidadecidade from cidade where nome =  '$nomecidade'";
         $sqlconsultacidade = $this->bd->prepare($consultacidade);
         $sqlconsultacidade->execute();
+        // exemplo
+        //$this->bd->query("select * from InsereCidade('Ijui',24);"); pra puxar de uma funcao
         
         if ($sqlconsultacidade->rowCount() > 0) {
             foreach ($sqlconsultacidade as $rs){

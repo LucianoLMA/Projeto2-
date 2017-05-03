@@ -192,9 +192,9 @@ require_once './protected/libs/controlador.php';// teste
                             <li role="separator" class="divider"></li>
                             <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaboradores</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Clientes</a></li>
+                            <li><a href="index.php?controle=clienteController&acao=listar">Manutenção de Clientes</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Segurança</a></li>
+                            <li><a href="index.php?controle=segurancaController&acao=listar">Manutenção de Segurança</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -210,9 +210,9 @@ require_once './protected/libs/controlador.php';// teste
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Reservas<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="index.php?controle=clienteController&acao=listar">Reserva Cliente</a></li>
+                            <li><a href="index.php?controle=reservaController&acao=listar">Reserva Cliente</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=rendaController&acao=listar">Reserva Colaborador</a></li>
+                            <li><a href="index.php?controle=reservaController&acao=listar">Reserva Colaborador</a></li>
                         </ul>
                     </li>
                     <li><a href="/locadoraveiculos/controlelogin/sair.php"  id="menutitle">Sair</a></li>
