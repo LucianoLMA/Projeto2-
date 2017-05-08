@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/view/cidade/formCidade.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/model/setorModel.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/model/reservaModel.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/controller/reservaController.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/libs/controlador.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/controller/usuarioController.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/controller/cidadeController.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/painel.php</file>
-            <file>file:/C:/Users/Nelci_pc/Documents/NetBeansProjects/Projeto2-/protected/view/cidade/listCidade.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
