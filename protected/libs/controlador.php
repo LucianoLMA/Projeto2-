@@ -15,12 +15,15 @@ Class Controlador extends Conexao{
                 
                 $controle = new $ctrlNome();              
                 
-                if($_GET['acao']=="novo" || $_GET['acao']=="listar"){
+                if($_GET['acao']=="novo" || $_GET['acao']=="listar" || $_GET['acao']=="listartodos"){
                     $controle->{$_GET['acao']}();
                 }else if($_GET['acao']=="inserir" || $_GET['acao']=="atualizar" || $_GET['acao']=="bloquear"){
                     $controle->{$_GET['acao']}($_POST);
                 }else if($_GET['acao']=="buscar" || $_GET['acao']=="excluir" || $_GET['acao']=="cancelarreserva"){
                     $controle->{$_GET['acao']}($_GET['id']);
+                }else if($_GET['acao']=="filtroReservacolaborador" || $_GET['acao']=="filtroRetornoveiculo"){
+                    $controle->{$_GET['acao']}($_POST);
+
                 }
             }
         }else{?>
@@ -42,15 +45,14 @@ Class Controlador extends Conexao{
                                         from veiculo v
                                        inner join reserva r
                                           on r.idveiculo = v.id
-                                       where r.idstatus = 3
+                                       --where r.idstatus = 3
                                        order by v.modelo, r.datasaida;";
                             $query = $this->bd->query($sql);
                             if ($query->rowCount() > 0) {
                                 foreach ($query as $rs) {?>
                                     <th>
                                         <img src = "<?php echo $rs['caminhonomefoto'] ?>" style="width: 200px; heigth: 80px;"/>
-                                        <label><?php echo $rs['datasaida'] ?></label>
-                                        <label><?php echo $rs['modelo'] ?></label>
+                                        <label><?php echo $rs['modelo'];  echo $rs['datasaida']?></label>
                                     </th>
                                 <?}
                             }
