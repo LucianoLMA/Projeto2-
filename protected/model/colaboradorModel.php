@@ -54,7 +54,7 @@ class ColaboradorModel extends Conexao {
             $query = $this->bd->prepare($sql);
             $query->execute($dados);
             
-            //Após realizar o insert na tabela usuário,faz insert na tabela gerente, pegando o ultimo id 
+            //Faz o insert no usuario, pega o ultimo id e atribui para o colaborador
             $usuarioregistro = "select max(id) as idusuario from usuario";
             $sqlusuarioregistro = $this->bd->prepare($usuarioregistro);
             $sqlusuarioregistro->execute();

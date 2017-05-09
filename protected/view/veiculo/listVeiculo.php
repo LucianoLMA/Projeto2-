@@ -18,6 +18,7 @@
                         <th>Ano Fabricação</th>
                         <th>Km. Inicial</th>
                         <th>Km. Final</th>
+                        <th>Imagem</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </thead>
@@ -25,17 +26,22 @@
                         <?php
                         foreach ($listaDados as $item) {
                             echo '<tr>';
-                            echo '<td>' . $item['modelo'];
-                            echo '<td>' . $item['placa'];
-                            echo '<td>' . $item['chassi'];
-                            echo '<td>' . $item['versao'];
-                            echo '<td>' . $item['anomodelo'];
-                            echo '<td>' . $item['anofabricacao'];
-                            echo '<td>' . $item['kminicial'];
-                            echo '<td>' . $item['kmfinal'];
+                            echo '<td style="padding-top: 25px;">' . $item['modelo'];
+                            echo '<td style="padding-top: 25px;">' . $item['placa'];
+                            echo '<td style="padding-top: 25px;">' . $item['chassi'];
+                            echo '<td style="padding-top: 25px;">' . $item['versao'];
+                            echo '<td style="padding-top: 25px;">' . $item['anomodelo'];
+                            echo '<td style="padding-top: 25px;">' . $item['anofabricacao'];
+                            echo '<td style="padding-top: 25px;">' . $item['kminicial'];
+                            echo '<td style="padding-top: 25px;">' . $item['kmfinal'];
+                            if($item['nomefoto'] != null){
+                                echo '<td>' . '<img src = "' . $item['caminhonomefoto'] . '" style="width: 100px; heigth: 80px;"/>';
+                            }else{
+                                echo '<td>' . '<img src = "http://localhost/locadoraveiculos/protected/imagens/noimagens/noimagem.png" style="width: 100px;"/>';   
+                            }
                             $id = $item['id'];
 
-                             echo "<td> <a href='painel.php?controle=veiculoController&acao=buscar&id=$id'>"
+                            echo "<td> <a href='painel.php?controle=veiculoController&acao=buscar&id=$id'>"
                             . " <span class='glyphicon glyphicon-pencil'> </span>"
                             . "</a> </td>";
                             echo "<td> <a onclick='excluir(\"excluir\",\"veiculoController\",$id)' href='#'>"

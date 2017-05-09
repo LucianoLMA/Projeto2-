@@ -2,7 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Cadastrar Veículo</div>
         <div class="panel-body">
-            <form action="<?php echo $acao; ?>" name="formVeiculo" id="formVeiculo" method="POST" class="form" role="form">
+            <form action="<?php echo $acao; ?>" name="formVeiculo" id="formVeiculo" method="POST" class="form" role="form" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-1">
                         <label for="id">Id</label>
@@ -21,7 +21,7 @@
                     <div class="col-md-3">
                         <label for="chassi">Chassi</label>
                         <input type="text" class="form-control" id="chassi" name="chassi" placeholder="Digite o Chassi" 
-                               value="<?php if (isset($veiculo)) echo $veiculo['chassi']; ?>" required minlength="17" style="text-transform: uppercase">
+                               value="<?php if (isset($veiculo)) echo $veiculo['chassi']; ?>" required minlength="17" maxlength="20" style="text-transform: uppercase">
                     </div>
                     <div class="col-md-3">
                         <label for="placa">Placa</label>
@@ -52,13 +52,33 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="kminicial">Km. Inicial</label>
-                        <input type="text" class="form-control" id="kmmascarainicial" name="kminicial" placeholder="Digite o Km. Inicial" 
+                        <input type="text" class="form-control" id="kmmascarainicial" maxlength="9" onkeyup="removervirgulapornada()" name="kminicial" placeholder="Digite o Km. Inicial" 
                                value="<?php if (isset($veiculo)) echo $veiculo['kminicial']; ?>" required>
                     </div>
                     <div class="col-md-3">
                         <label for="kmfinal">Km. Final</label>
-                        <input type="text" class="form-control" id="kmmascarafinal" name="kmfinal" placeholder="Digite o Km. Final" 
+                        <input type="text" class="form-control" id="kmmascarafinal" name="kmfinal" maxlength="9" onkeyup="removervirgulapornada()" placeholder="Digite o Km. Final" 
                                value="<?php if (isset($veiculo)) echo $veiculo['kmfinal']; ?>" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="imagem">Imagem do Veículo</label>
+                        <input name="arquivo" type="file" required=""/>
+                        <?php
+                            //pede foto qdo alterar um veiculo
+                            if(isset($veiculo['nomefoto']) != null){
+                                if($veiculo['nomefoto'] == ''){
+                                    echo '<img src = "http://localhost/locadoraveiculos/protected/imagens/noimagens/noimagem.png" style="width: 100px;"/>';   
+                                }else{
+                                    echo '<img src = "' . $veiculo['caminhonomefoto'] . '" style="width: 100px; heigth: 80px;"/>';
+                                }
+                            }//pede foto qdo cadastrar um novo veiculo
+                            else{
+                                echo '<img src = "http://localhost/locadoraveiculos/protected/imagens/noimagens/noimagem.png" style="width: 100px;"/>';   
+                            }
+                        ?>
                     </div>
                 </div>
                 
@@ -101,6 +121,9 @@
             },
             kmfinal: {
                 required: true
+            },
+            arquivo: {
+                required: true
             }
         },
         messages: {
@@ -132,6 +155,9 @@
             },
             kmfinal: {
                 required: "Por favor, informe a Km. Final"
+            },
+            arquivo: {
+                required: "Por favor, informe a Imagem do Veículo."
             }
         }
     });
