@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Locadora Veículos222</title>
+        <title>Locadora Veículos</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="all" />
         <!-- Mobile Meta -->
@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="includes/css/jquery-ui.css" type="text/css" />
         <script src="includes/js/bootstrap.min.js"></script>
         <script src="includes/js/dataTables.bootstrap.min.js"></script>
-
+        <script src="includes/js/validarcampos.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap core CSS -->
         <link href="includes/css/bootstrap.css" rel="stylesheet">
@@ -57,14 +57,22 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-9">
-
+                            <div class="col-md-9" style="padding-left: 20%">
                                 <div class="header-left clearfix">
-
                                     <div class="main-navigation  animated with-dropdown-buttons">
                                         <nav class="navbar navbar-default" role="navigation">
-                                            <div class="container-fluid" style="padding-left: 60%;">
-
+                                            <div class="container-fluid">
+                                                <form action="controlelogin/conectado.php" method="POST">
+                                                    <table>
+                                                        <tr>
+                                                            <td><label style="color: white">CPF:&nbsp;</label></td>
+                                                            <td><input type="text" class="form-control" id="cpf_atualizado" name="cpf" placeholder="Digite seu CPF" ></td>
+                                                            <td><label style="color: white">&nbsp; &nbsp;Senha:&nbsp;</label></td>
+                                                            <td><input type="password" class="form-control" id="senha" name="senha" placeholder="Digite sua Senha"></td>
+                                                            <td>&nbsp; &nbsp;<button type="submit" class="btn btn-success">Entrar</button></button></td>
+                                                        </tr>
+                                                    </table>
+                                                </form>
                                                 <!-- Toggle get grouped for better mobile display -->
                                                 <div class="navbar-header">
                                                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -73,28 +81,7 @@
                                                         <span class="icon-bar"></span>
                                                         <span class="icon-bar"></span>
                                                     </button>
-
                                                 </div>
-                                                <div class="collapse navbar-collapse" id="navbar-collapse-1">
-                                                    <div class="menu">
-
-                                                        <ul class="nav navbar-nav navbar-left">
-                                                            
-                                                            </li>
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"> Entrar
-                                                                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                                                                </a>
-                                                                    <ul class="dropdown-menu dropdown-user" style="width: 252px;">
-                                                                        
-                                                                        <li class="divider"></li>
-                                                                        <input type="submit" class="btn btn-success" value="Entrar"></button>
-                                                                    </ul>
-                                                                
-                                                            </li>
-                                                        </ul>                                                   
-                                                    </div>
-                                                </div> 
                                             </div>
                                         </nav>
                                     </div> 

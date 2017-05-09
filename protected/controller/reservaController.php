@@ -64,7 +64,7 @@ class ReservaController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível cancelar a Reserva.
+                    Não é permitido cancelar a reserva antes de 24 horas da saída.
                   </div>';
         }
         $this->listar();

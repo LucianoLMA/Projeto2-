@@ -1,5 +1,7 @@
 <?php
-require_once './protected/libs/controlador.php';// teste
+require_once './protected/libs/controlador.php';
+include("controlelogin/conectadosession.php");
+require_once("config/confloginrel.php");
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -54,6 +56,43 @@ require_once './protected/libs/controlador.php';// teste
                 });
                 $("#dialog").dialog("open");
             };
+            
+            function cancelarreserva(acao, controle, id) {
+
+                $("#dialogcancelarreserva").dialog({
+                    autoOpen: false,
+                    modal: true,
+                    buttons: {
+                        "Cancelar": function () {
+                            $(this).dialog("close");
+                        },
+                        "Confirmar": function () {
+                            window.location.href = 'painel.php?controle=' + controle + '&acao=' + acao + '&id=' + id;
+                        }
+                    }
+                });
+                $("#dialogcancelarreserva").dialog("open");
+            };
+            
+            //Abre o pop-up dos relatórios
+            function abrir(URL) {
+                var width = 590;
+                var height = 350;
+                var left = 380;
+                var top = 200;
+                window.open(URL, 'janela', 'width=' + width +
+                        ', height=' + height +
+                        ', top=' + top +
+                        ', left=' + left +
+                        ', scrollbars=yes, \n\
+                                 status=no, \n\
+                                 toolbar=no, \n\
+                                 location=no, \n\
+                                 directories=no, \n\
+                                 menubar=no, \n\
+                                 resizable=no, \n\
+                                 fullscreen=no');
+                }
         </script>
         <script src="includes/js/jquery.easy-confirm-dialog.js"></script>
         <style type="text/css">
@@ -81,7 +120,7 @@ require_once './protected/libs/controlador.php';// teste
             }
             .ui-dialog 
             .ui-dialog-titlebar-close{
-                background-image: url(includes/img/remove.png);
+                background-image: url(includes/imagens/remove.png);
                 background-color: white;
             }
             .ui-draggable 
@@ -105,7 +144,7 @@ require_once './protected/libs/controlador.php';// teste
                 padding-top: 85px;
             }
 
-            /*AtlantaJeans theme added*/
+            /*theme added*/
             .panel-primary>.panel-heading {
               color: #fff;
               background-color: #3D5B99;
@@ -192,9 +231,9 @@ require_once './protected/libs/controlador.php';// teste
                             <li role="separator" class="divider"></li>
                             <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaboradores</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=clienteController&acao=listar">Manutenção de Clientes</a></li>
+                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Clientes</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=segurancaController&acao=listar">Manutenção de Segurança</a></li>
+                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Segurança</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -210,12 +249,31 @@ require_once './protected/libs/controlador.php';// teste
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Reservas<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="index.php?controle=reservaController&acao=listar">Reserva Cliente</a></li>
+                            <li><a href="painel.php?controle=reservacolaboradorController&acao=listar">Saída de Veículo </a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=reservaController&acao=listar">Reserva Colaborador</a></li>
+                            <li><a href="painel.php?controle=retornoveiculoController&acao=listar">Retorno de Veículo</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Relatórios<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:abrir('protected/view/relatoriosaida/filtrorelatoriosaida.php');">Saida de Veículo</a></li>
                         </ul>
                     </li>
                     <li><a href="/locadoraveiculos/controlelogin/sair.php"  id="menutitle">Sair</a></li>
+                    <?php
+                        //Busca o nome do usuário logado para mostrar no topo da pagina -->
+                        $cpflogado = $_SESSION['cpf'];
+                        $sqlconsultausuariologado = "select (usuario.nome || ' ' || usuario.sobrenome) as nomecolaborador
+                                                       from colaborador inner join usuario on colaborador.idusuario = usuario.id
+                                                      where usuario.cpf = '$cpflogado' ";
+                        $sqlconsultausuariologadoResult = pg_query($sqlconsultausuariologado);
+                        while ($sqlconsultausuariologadoResultFim = pg_fetch_assoc($sqlconsultausuariologadoResult)) {
+                                $nomeusuariologado = $sqlconsultausuariologadoResultFim["nomecolaborador"];
+                        }
+                    ?>
+                    <li><label style="color: white">Usuário Logado: <?php echo $nomeusuariologado; ?></label></li>
+                    
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -285,6 +343,9 @@ require_once './protected/libs/controlador.php';// teste
     </script>
     <div style="display: none">
         <div id="dialog" title="Exclusão do Registro"/><img src="includes/imagens/question.png" alt="" /><span>Tem certeza que deseja excluir o registro?</span></div>
+    </div>
+    <div style="display: none">
+        <div id="dialogcancelarreserva" title="Cancelar Reserva"/><img src="includes/imagens/question.png" alt="" /><span>Tem certeza que deseja cancelar a reserva?</span></div>
     </div>
 </body>
 </html>

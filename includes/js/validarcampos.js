@@ -1,8 +1,9 @@
 //Função para máscara de valor
 $(document).ready(function ($) {
     $("#valor").maskMoney({symbol: 'R$ ',showSymbol: true, thousands: '.', decimal: ',', symbolStay: true});
-    $("#kmmascarainicial").maskMoney({thousands: '.', decimal: '.', symbolStay: true});
-    $("#kmmascarafinal").maskMoney({thousands: '.', decimal: '.', symbolStay: true});
+    $("#kmmascarainicial").maskMoney({decimal: '.'});
+    $("#kmmascarafinal").maskMoney({decimal: '.'});
+    $("#kmretorno").maskMoney({decimal: '.'});
     $("#cpf_atualizado").mask("999.999.999-99");
     $("#rg").mask("9999999999");
     $("#telefone").mask("(99)9999-9999");
@@ -12,6 +13,10 @@ $(document).ready(function ($) {
     $("#placa").mask("aaa-9999");
     $("#anofabricacao").mask("9999");
     $("#anomodelo").mask("9999");
+    $("#horaprevsaida").mask("99:99");
+    $("#horaprevretorno").mask("99:99");
+    $("#data").mask("99/99/9999");
+    $("#dataprevretorno").mask("99/99/9999");
     
     //Data Calendar
     $("#data").datepicker({
@@ -25,9 +30,26 @@ $(document).ready(function ($) {
         prevText: 'Anterior'
     });
     
-   
-    
     $("#data").on("change",function(){
+        if(typeof verificaIdade == 'function'){
+            var selected = $(this).val();
+            verificaIdade(selected);
+        }
+    });
+    
+    //Data Calendar Data Previsão Retorno
+    $("#dataprevretorno").datepicker({
+        dateFormat: 'dd/mm/yy',
+        dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+        monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        nextText: 'Próximo',
+        prevText: 'Anterior'
+    });
+    
+    $("#dataprevretorno").on("change",function(){
         if(typeof verificaIdade == 'function'){
             var selected = $(this).val();
             verificaIdade(selected);
@@ -35,6 +57,71 @@ $(document).ready(function ($) {
     });
 });
 
+//Comparar as datas para reserva
+function checarDatas() {
+    var formReserva = document.formReserva;
+    console.log(formReserva);
+    var datasaidaprev = new Date(formReserva.datasaidaprev.value);
+    var dataretprev = new Date(formReserva.dataretprev.value);
+    
+    if (!datasaidaprev || !dataretprev) return false;
+    if (datasaidaprev > dataretprev) {
+        alert("Data Previsão Saída não pode ser maior que a Data Previsão Retorno");
+        formReserva.dataretprev.value='';
+        formReserva.dataretprev.focus();
+        return false;
+    } else {
+        return true;
+    }
+}
+
+//Testar se a hora é válida
+function Mascara_Hora(Campo){
+    var hora01 = '';
+    var Hora = document.getElementById(Campo).value;
+    hora01 = hora01 + Hora;
+
+    if (hora01.length == 2){ 
+            hora01 = hora01 + ':'; 
+            Hora = hora01; 
+    } 
+    if (hora01.length == 5)
+    {
+            Verifica_Hora(Campo);
+    }
+}
+
+function Verifica_Hora(Campo){
+    Hora = document.getElementById(Campo);
+    hrs = (Hora.value.substring(0,2));
+    min = (Hora.value.substring(3,5));
+
+    estado = ""; 
+    if ((hrs < 00 ) || (hrs > 23) || ( min < 00) ||( min > 59)){ 
+            estado = "errada"; 
+    } 
+    if (Hora == ""){ 
+            estado = "errada"; 
+    } 
+    if (estado == "errada"){ 
+            alert("Hora inválida!"); 
+            document.getElementById(Campo).value='';
+            document.getElementById(Campo).focus(); 
+    }
+}
+
+
+//Remover virgula por nada
+function removervirgulapornada(){ 
+    var string = $('#kmmascarainicial').val();
+    string = string.replace(',','');
+    $('#kmmascarainicial').val(string);
+    
+    var string = $('#kmmascarafinal').val();
+    string = string.replace(',','');
+    $('#kmmascarafinal').val(string);
+}
+     
 //Begin formatação CPF
 function verifica_cpf_atualizado(valor) {
     valor = valor.toString();
@@ -44,10 +131,9 @@ function verifica_cpf_atualizado(valor) {
     } else {
         return false;
     }
-    
 } 
 
-function calc_digitos_posicoes(digitos, posicoes = 10, soma_digitos = 0) {
+/*function calc_digitos_posicoes(digitos, posicoes=10, soma_digitos=0) {
     digitos = digitos.toString();
     for (var i = 0; i < digitos.length; i++) {
         soma_digitos = soma_digitos + (digitos[i] * posicoes);
@@ -66,7 +152,7 @@ function calc_digitos_posicoes(digitos, posicoes = 10, soma_digitos = 0) {
     var cpf = digitos + soma_digitos;
     return cpf;
     
-    }
+}*/
 
 function valida_cpf(valor) {
     valor = valor.toString();
