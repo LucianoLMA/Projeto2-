@@ -2,7 +2,7 @@
 
 class CidadeController {
     private $bd, $model;
-    private $estadoModel;
+    private $estadoModel;.
     private $cidadeModel;
     
     function __construct() {
