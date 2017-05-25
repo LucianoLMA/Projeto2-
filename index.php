@@ -63,6 +63,11 @@
                                         <nav class="navbar navbar-default" role="navigation">
                                             <div class="container-fluid">
                                                 <form action="controlelogin/conectado.php" method="POST">
+                                                    <?php
+                                                        if ($_GET != null) {
+                                                            echo "<div style='color: red; height: 34px;'><b>Login ou Senha Inválidos.</b></div>";
+                                                         }
+                                                    ?>
                                                     <table>
                                                         <tr>
                                                             <td><label style="color: white">CPF:&nbsp;</label></td>

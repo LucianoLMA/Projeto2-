@@ -1,6 +1,4 @@
-//Função para máscara de valor
 $(document).ready(function ($) {
-    $("#valor").maskMoney({symbol: 'R$ ',showSymbol: true, thousands: '.', decimal: ',', symbolStay: true});
     $("#kmmascarainicial").maskMoney({decimal: '.'});
     $("#kmmascarafinal").maskMoney({decimal: '.'});
     $("#kmretorno").maskMoney({decimal: '.'});
@@ -57,7 +55,7 @@ $(document).ready(function ($) {
     });
 });
 
-//Comparar as datas para reserva
+    //Compara as datas para reserva
 function checarDatas() {
     var formReserva = document.formReserva;
     console.log(formReserva);
@@ -75,7 +73,7 @@ function checarDatas() {
     }
 }
 
-//Testar se a hora é válida
+    //Testa se a hora é válida
 function Mascara_Hora(Campo){
     var hora01 = '';
     var Hora = document.getElementById(Campo).value;
@@ -111,7 +109,7 @@ function Verifica_Hora(Campo){
 }
 
 
-//Remover virgula por nada
+    //Remover virgula
 function removervirgulapornada(){ 
     var string = $('#kmmascarainicial').val();
     string = string.replace(',','');
@@ -218,7 +216,6 @@ $(function(){
         if ( formata_cpf_atualizado(cpf_atualizado)) {
             $(this).val( formata_cpf_atualizado(cpf_atualizado));
         } else {
-            //Se os números informados no campo CPF não forem todos iguais será executado esse teste abaixo
             var valorvariavel = document.getElementById('cpf_atualizado').value;
             if(valorvariavel !== ''){
                 alert('CPF Inválido por favor digite novamente!');
@@ -231,7 +228,7 @@ $(function(){
 });
 //End formatação CPF
 
-//Função somente Números
+    //Função somente números
 function Onlynumbers(e)
 {
     var tecla = new Number();
@@ -249,7 +246,7 @@ function Onlynumbers(e)
     }
 }
 
-//Função Somente Letras
+    //Função somente letras
 function Onlychars(e)
 {
     var tecla = new Number();
@@ -267,7 +264,7 @@ function Onlychars(e)
     }
 }
 
-//Máscara de Telefone Nono 9 Dígito
+    //Máscara de Telefone Nono 9 Dígito
 $(document).ready(function ($) {
     function inputHandler(masks, max, event) {
         var c = event.target;
@@ -291,3 +288,33 @@ $(document).ready(function ($) {
         doc.addEventListener('input', inputHandler.bind(undefined, docMask, 14), false);
     }
 });
+
+    //Validar a confirmaçao de senha do Gerente
+function verificarSenhas(){
+    if (document.formGerente.senha.value == document.formGerente.confirmasenha.value){
+        $('#mensagemlabelerro').hide();
+        $('#definasenha').fadeOut(1000);
+    }else{
+        document.formGerente.confirmasenha.focus();
+        document.formGerente.senha.value = '';
+        document.formGerente.confirmasenha.value = '';
+        document.formGerente.senha.focus();
+        $('#mensagemlabelerro').show();
+        $('#definasenha').fadeIn(1000);
+    }
+};
+
+    //Validar a confirmaçao de senha do Colaborador
+function verificarSenhasColaborador(){
+    if (document.formColaborador.senha.value == document.formColaborador.confirmasenha.value){
+        $('#mensagemlabelerro').hide();
+        $('#definasenha').fadeOut(1000);
+    }else{
+        document.formColaborador.confirmasenha.focus();
+        document.formColaborador.senha.value = '';
+        document.formColaborador.confirmasenha.value = '';
+        document.formColaborador.senha.focus();
+        $('#mensagemlabelerro').show();
+        $('#definasenha').fadeIn(1000);
+    }
+};

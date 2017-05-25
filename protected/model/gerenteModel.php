@@ -7,14 +7,12 @@ class GerenteModel extends Conexao {
     }
 
     public function inserir(array $dados) {
-        //1º faz insert na tabela usuario
         $idsetor = $_POST['idsetor'];
         $idcidade = $_POST['idcidade'];
         $datanascimento = $_POST['datanascimento'];
         $cpf = $_POST['cpf'];
         $email = $_POST['email'];
         
-        //Verifica se CPF já esta cadastrado 
         $consultacpf = "select count(*) as quantidadecpf from usuario where cpf = '$cpf'";
         $sqlconsultacpf = $this->bd->prepare($consultacpf);
         $sqlconsultacpf->execute();
@@ -25,7 +23,6 @@ class GerenteModel extends Conexao {
             }
         }
         
-        //Verifica se e-mail já esta cadastrado
         $consultaemail = "select count(*) as quantidadeemail from usuario where email = '$email'";
         $sqlconsultaemail = $this->bd->prepare($consultaemail);
         $sqlconsultaemail->execute();
@@ -41,7 +38,6 @@ class GerenteModel extends Conexao {
         }else if($quantidadeemail >= 1){
             echo "<script>alert('E-mail já cadastrado! Favor informe outro E-mail');</script>";
         }else{
-            //CPF nao cadastrado, insere o registro
             $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade) "
                     . "          VALUES(:nome, :sobrenome, '$datanascimento', '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade)";
             
@@ -53,8 +49,7 @@ class GerenteModel extends Conexao {
             unset($dados['datanascimento']);
             $query = $this->bd->prepare($sql);
             $query->execute($dados);
-
-           
+          
             $usuarioregistro = "select max(id) as idusuario from usuario";
             $sqlusuarioregistro = $this->bd->prepare($usuarioregistro);
             $sqlusuarioregistro->execute();

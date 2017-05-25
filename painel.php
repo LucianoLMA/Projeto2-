@@ -56,7 +56,7 @@ require_once("config/confloginrel.php");
                 });
                 $("#dialog").dialog("open");
             };
-            
+                        
             function cancelarreserva(acao, controle, id) {
 
                 $("#dialogcancelarreserva").dialog({
@@ -205,6 +205,11 @@ require_once("config/confloginrel.php");
                 height: 50px;
                 background: #3D5B99
             }
+            /*CSS CONFIRMAÇÕES DE SENHA*/
+            #mensagemlabelerro{
+             display: none;
+             color: red;
+            }
         </style>
     </head>
 </head>
@@ -347,5 +352,7 @@ require_once("config/confloginrel.php");
     <div style="display: none">
         <div id="dialogcancelarreserva" title="Cancelar Reserva"/><img src="includes/imagens/question.png" alt="" /><span>Tem certeza que deseja cancelar a reserva?</span></div>
     </div>
+
+    
 </body>
 </html>

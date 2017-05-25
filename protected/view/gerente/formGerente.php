@@ -44,7 +44,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="datanascimento">Data Nascimento</label>
-                        <input type="text" class="form-control" id="data" name="datanascimento" placeholder="Informe a Data/Nascimento" 
+                        <input type="text" class="form-control" id="data" name="datanascimento" placeholder="Informe a Data de Nascimento" 
                                        value="<?php if (isset($gerente)) echo $gerente['datanascimento']; ?>" required>
                     </div>
                     <div class="col-md-3">
@@ -99,15 +99,25 @@
                 <div class="row">
                     <div class="col-md-5">
                         <label for="email">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Digiteo E-mail" 
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Digite o E-mail" 
                                        value="<?php if (isset($gerente)) echo $gerente['email']; ?>">
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-md-3">
                         <label for="senha">Senha</label>
                         <input type="password" class="form-control" attrname="senha" name="senha" placeholder="Digite a Senha" 
                                         value="<?php if (isset($gerente)) echo $gerente['senha']; ?>">
                     </div>
+                    <div class="col-md-3">
+                        <label for="confirmasenha">Confirma Senha</label>
+                        <input type="password" class="form-control" attrname="confirmasenha" name="confirmasenha" placeholder="Confirme sua Senha" 
+                               onchange="verificarSenhas()" value="<?php if (isset($gerente)) echo $gerente['senha']; ?>">
+                    </div>
                 </div>
+                <div id="mensagemlabelerro">
+                    <label style="font-size: 12px">As senhas não conferem. Por favor informe as  senhas novamente!</label>
+                </div>	
                 <br/>
                 <button type="submit" class="btn btn-success">Gravar</button>
                 <button type="reset" class="btn btn-primary">Limpar</button>

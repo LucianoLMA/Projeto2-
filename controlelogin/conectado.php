@@ -3,11 +3,9 @@
     session_start();
     $cpf = $_POST['cpf'];
     $senha = $_POST['senha'];
-    //teste githuuuuuuuuuuuuuuuub
+    
     $result = pg_query("select usuario.cpf
-                          from colaborador 
-                         inner join usuario 
-                            on colaborador.idusuario = usuario.id
+                          from usuario
                          where usuario.cpf = '$cpf' AND usuario.senha = '$senha'");
     if (pg_num_rows($result) > 0) {
             $_SESSION['cpf'] = $cpf;
@@ -15,7 +13,9 @@
             header('location:../painel.php');
 
     } else {
-        $redirect = "../index.php";
+        unset($_SESSION['login']);
+        unset($_SESSION['senha']);
+        $redirect = "../index.php?erro=01";
         header("location:$redirect");
     }
 ?>
