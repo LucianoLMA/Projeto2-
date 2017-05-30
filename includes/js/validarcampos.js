@@ -7,7 +7,6 @@ $(document).ready(function ($) {
     $("#telefone").mask("(99)9999-9999");
     $("#celular").mask("(99)99999-9999");
     $("#cep").mask("99999-999");
-    $("#data").mask("99/99/9999");
     $("#placa").mask("aaa-9999");
     $("#anofabricacao").mask("9999");
     $("#anomodelo").mask("9999");
@@ -55,25 +54,7 @@ $(document).ready(function ($) {
     });
 });
 
-    //Compara as datas para reserva
-function checarDatas() {
-    var formReserva = document.formReserva;
-    console.log(formReserva);
-    var datasaidaprev = new Date(formReserva.datasaidaprev.value);
-    var dataretprev = new Date(formReserva.dataretprev.value);
-    
-    if (!datasaidaprev || !dataretprev) return false;
-    if (datasaidaprev > dataretprev) {
-        alert("Data Previsão Saída não pode ser maior que a Data Previsão Retorno");
-        formReserva.dataretprev.value='';
-        formReserva.dataretprev.focus();
-        return false;
-    } else {
-        return true;
-    }
-}
-
-    //Testa se a hora é válida
+//Testar se a hora é válida
 function Mascara_Hora(Campo){
     var hora01 = '';
     var Hora = document.getElementById(Campo).value;
@@ -108,8 +89,6 @@ function Verifica_Hora(Campo){
     }
 }
 
-
-    //Remover virgula
 function removervirgulapornada(){ 
     var string = $('#kmmascarainicial').val();
     string = string.replace(',','');
@@ -120,7 +99,7 @@ function removervirgulapornada(){
     $('#kmmascarafinal').val(string);
 }
      
-//Begin formatação CPF
+//Formatação CPF
 function verifica_cpf_atualizado(valor) {
     valor = valor.toString();
     valor = valor.replace(/[^0-9]/g, '');
@@ -129,9 +108,10 @@ function verifica_cpf_atualizado(valor) {
     } else {
         return false;
     }
+    
 } 
 
-/*function calc_digitos_posicoes(digitos, posicoes=10, soma_digitos=0) {
+function calc_digitos_posicoes(digitos, posicoes = 10, soma_digitos = 0) {
     digitos = digitos.toString();
     for (var i = 0; i < digitos.length; i++) {
         soma_digitos = soma_digitos + (digitos[i] * posicoes);
@@ -150,7 +130,7 @@ function verifica_cpf_atualizado(valor) {
     var cpf = digitos + soma_digitos;
     return cpf;
     
-}*/
+}
 
 function valida_cpf(valor) {
     valor = valor.toString();
@@ -216,6 +196,7 @@ $(function(){
         if ( formata_cpf_atualizado(cpf_atualizado)) {
             $(this).val( formata_cpf_atualizado(cpf_atualizado));
         } else {
+            //Testa se CPF é valido
             var valorvariavel = document.getElementById('cpf_atualizado').value;
             if(valorvariavel !== ''){
                 alert('CPF Inválido por favor digite novamente!');
@@ -226,9 +207,9 @@ $(function(){
         } 
     });
 });
-//End formatação CPF
+//Fim CPF
 
-    //Função somente números
+//Função somente Números
 function Onlynumbers(e)
 {
     var tecla = new Number();
@@ -246,7 +227,7 @@ function Onlynumbers(e)
     }
 }
 
-    //Função somente letras
+//Função Somente Letras
 function Onlychars(e)
 {
     var tecla = new Number();
@@ -264,7 +245,7 @@ function Onlychars(e)
     }
 }
 
-    //Máscara de Telefone Nono 9 Dígito
+//Máscara de Telefone Nono 9 Dígito
 $(document).ready(function ($) {
     function inputHandler(masks, max, event) {
         var c = event.target;
@@ -289,7 +270,7 @@ $(document).ready(function ($) {
     }
 });
 
-    //Validar a confirmaçao de senha do Gerente
+//Confirmações de senha do Gerente
 function verificarSenhas(){
     if (document.formGerente.senha.value == document.formGerente.confirmasenha.value){
         $('#mensagemlabelerro').hide();
@@ -304,7 +285,7 @@ function verificarSenhas(){
     }
 };
 
-    //Validar a confirmaçao de senha do Colaborador
+//Confirmações de senha do Colaborador
 function verificarSenhasColaborador(){
     if (document.formColaborador.senha.value == document.formColaborador.confirmasenha.value){
         $('#mensagemlabelerro').hide();
@@ -318,3 +299,137 @@ function verificarSenhasColaborador(){
         $('#definasenha').fadeIn(1000);
     }
 };
+
+//Confirmações de senha do Segurança
+function verificarSenhasSeguranca(){
+    if (document.formSeguranca.senha.value == document.formSeguranca.confirmasenha.value){
+        $('#mensagemlabelerro').hide();
+        $('#definasenha').fadeOut(1000);
+    }else{
+        document.formSeguranca.confirmasenha.focus();
+        document.formSeguranca.senha.value = '';
+        document.formSeguranca.confirmasenha.value = '';
+        document.formSeguranca.senha.focus();
+        $('#mensagemlabelerro').show();
+        $('#definasenha').fadeIn(1000);
+    }
+};
+
+//Validar se Colaborador ou Gerente é maior de idade ou não
+function getIdade(data) {
+   var hoje = new Date();
+   var nascimento = new Date(convertDateMMDDYYY(data.split("/")));
+   var ano = hoje.getFullYear() - nascimento.getFullYear();
+   var m = hoje.getMonth() - nascimento.getMonth();
+   if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+        ano--;
+    }
+    return ano;
+}
+
+function convertDateMMDDYYY(datearray) {
+  return datearray[1] + '-' + datearray[0] + '-' + datearray[2];
+}
+
+function maiorIdade(){
+  var data = document.getElementById("data");
+  if(getIdade(data.value) < 18){
+      document.getElementById("maiordeidade").innerHTML= "<div style='color: red; font-size: 12px;'><b>Usuário menor de idade. É necessário informar um usuário maior de idade para dar continuidade no cadastro!</b></style>";
+      document.getElementById("data").value = '';
+      document.getElementById("data").focus();
+  }else{
+      document.getElementById("maiordeidade").innerHTML= "";
+  }
+}
+
+function validaDataPrevReserva(){
+    now = new Date;
+    mes = now.getMonth() + 1;
+    if(mes < 10){
+        mesatual = '0' + mes;
+    }else{
+        mesatual = mes;
+    }
+    
+    dataatual = now.getDate() + '/' + mesatual + "/" + now.getFullYear();
+    datadocampo = document.getElementById("data").value;
+    if(dataatual > datadocampo){
+        document.getElementById("mensagemdataprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data, pois a data informada é menor que a data atual!</b></style>";
+        document.getElementById("data").value = '';
+        document.getElementById("data").focus();
+    }else{
+        document.getElementById("mensagemdataprevisaosaida").innerHTML= "";
+    }
+}
+
+//Validação de Hora Previsão Saida
+function validaHoraPrevisaoSaida(){
+    now = new Date;
+    //Verificar se a data é menor que a data atual
+    hora = now.getHours();
+    minutos = now.getMinutes();
+    horaprevinformada = document.getElementById("horaprevsaida").value;
+    //remove os : do campo para comparar a hora
+    horaprevinformada = horaprevinformada.replace(/\:/g, '');
+    if(minutos < 10){
+        horaatualminutos = '0' + minutos;
+    }else{
+        horaatualminutos = minutos;
+    }
+    horaatual = hora + '' + horaatualminutos;
+    
+    if(horaatual > horaprevinformada){
+        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir a hora, pois a hora informada é menor que a hora atual!</b></style>";
+        document.getElementById("horaprevsaida").value = '';
+        document.getElementById("horaprevsaida").focus();
+    }else{
+        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "";
+    }
+}
+
+//Validação de Data Previsão Retorno
+function validaDataPrevRetorno(){
+    now = new Date;
+    mes = now.getMonth() + 1;
+    
+    if(mes < 10){
+        mesatual = '0' + mes;
+    }else{
+        mesatual = mes;
+    }
+    dataatual = now.getDate() + '/' + mesatual + "/" + now.getFullYear();
+    datadocampo = document.getElementById("dataprevretorno").value;
+    if(dataatual > datadocampo){
+        document.getElementById("mensagemdataprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data, pois a data informada é menor que a data atual!</b></style>";
+        document.getElementById("dataprevretorno").value = '';
+        document.getElementById("dataprevretorno").focus();
+    }else{
+        document.getElementById("mensagemdataprevisaoretorno").innerHTML= "";
+    }
+}
+
+//Validação de Hora Previsão Retorno
+function validaHoraPrevisaoRetorno(){
+    now = new Date;
+    hora = now.getHours();
+    minutos = now.getMinutes();
+    //Verificar se a data é menor que a data atual
+    
+    horaprevinformada = document.getElementById("horaprevretorno").value;
+    horaprevinformada = horaprevinformada.replace(/\:/g, '');
+    
+    if(minutos < 10){
+        horaatualminutos = '0' + minutos;
+    }else{
+        horaatualminutos = minutos;
+    }
+    horaatual = hora + '' + horaatualminutos;
+    
+    if(horaatual > horaprevinformada){
+        document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir a hora, pois a hora informada é menor que a hora atual!</b></style>";
+        document.getElementById("horaprevretorno").value = '';
+        document.getElementById("horaprevretorno").focus();
+    }else{
+        document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "";
+    }
+}
