@@ -56,7 +56,7 @@ require_once("config/confloginrel.php");
                 });
                 $("#dialog").dialog("open");
             };
-                        
+            
             function cancelarreserva(acao, controle, id) {
 
                 $("#dialogcancelarreserva").dialog({
@@ -144,7 +144,7 @@ require_once("config/confloginrel.php");
                 padding-top: 85px;
             }
 
-            /*theme added*/
+            /*Tema*/
             .panel-primary>.panel-heading {
               color: #fff;
               background-color: #3D5B99;
@@ -205,14 +205,31 @@ require_once("config/confloginrel.php");
                 height: 50px;
                 background: #3D5B99
             }
-            /*CSS CONFIRMAÇÕES DE SENHA*/
+            /*CSS confirmação de senha*/
             #mensagemlabelerro{
-             display: none;
-             color: red;
+            	display: none;
+            	color: red;
             }
         </style>
     </head>
 </head>
+<?php
+    //Buscar o nome do usuário Logado -->
+    $cpflogado = $_SESSION['cpf'];
+    $sqlconsultausuariologado = "select (usuario.nome || ' ' || usuario.sobrenome) as nomecolaborador,
+                                        usuario.tipousuario as tipousuario,
+                                        administrador.administrador
+                                   from usuario 
+                                   left join administrador 
+                                     on usuario.id = administrador.idusuario
+                                  where usuario.cpf = '$cpflogado' ";
+    $sqlconsultausuariologadoResult = pg_query($sqlconsultausuariologado);
+    while ($sqlconsultausuariologadoResultFim = pg_fetch_assoc($sqlconsultausuariologadoResult)) {
+            $nomeusuariologado = $sqlconsultausuariologadoResultFim["nomecolaborador"];
+            $tipousuario = $sqlconsultausuariologadoResultFim["tipousuario"];
+            $administrador = $sqlconsultausuariologadoResultFim["administrador"];
+    }
+?>
 <body style="padding-top: 55px;">
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #3D5B99">
@@ -229,54 +246,59 @@ require_once("config/confloginrel.php");
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="painel.php"  id="menutitle">Home</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenções<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="painel.php?controle=gerenteController&acao=listar">Manutenção de Gerente</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaboradores</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Clientes</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="index.php?controle=rendaController&acao=listar">Manutenção de Segurança</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenção Geral<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="painel.php?controle=veiculoController&acao=listar">Manutenção de Veículo</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="painel.php?controle=setorController&acao=listar">Manutenção de Setor</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="painel.php?controle=cidadeController&acao=listar">Manutenção de Cidade</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Reservas<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="painel.php?controle=reservacolaboradorController&acao=listar">Saída de Veículo </a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="painel.php?controle=retornoveiculoController&acao=listar">Retorno de Veículo</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Relatórios<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="javascript:abrir('protected/view/relatoriosaida/filtrorelatoriosaida.php');">Saida de Veículo</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="/locadoraveiculos/controlelogin/sair.php"  id="menutitle">Sair</a></li>
+                    <?php //Se for Adminstrador
+                         if($administrador == 'S'){ ?>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenções<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="painel.php?controle=gerenteController&acao=listar">Manutenção de Gerente</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaborador</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=segurancaController&acao=listar">Manutenção de Segurança</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=administradorController&acao=listar">Manutenção de Administrador</a></li>
+                                    </ul>
+                                </li>
+                         
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenção Gerais<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="painel.php?controle=veiculoController&acao=listar">Manutenção de Veículo</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=setorController&acao=listar">Manutenção de Setor</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=cidadeController&acao=listar">Manutenção de Cidade</a></li>
+                                    </ul>
+                                </li>
+                            <?php }
+                         ?>
                     <?php
-                        //Busca o nome do usuário logado para mostrar no topo da pagina -->
-                        $cpflogado = $_SESSION['cpf'];
-                        $sqlconsultausuariologado = "select (usuario.nome || ' ' || usuario.sobrenome) as nomecolaborador
-                                                       from colaborador inner join usuario on colaborador.idusuario = usuario.id
-                                                      where usuario.cpf = '$cpflogado' ";
-                        $sqlconsultausuariologadoResult = pg_query($sqlconsultausuariologado);
-                        while ($sqlconsultausuariologadoResultFim = pg_fetch_assoc($sqlconsultausuariologadoResult)) {
-                                $nomeusuariologado = $sqlconsultausuariologadoResultFim["nomecolaborador"];
-                        }
+                    //Admin e Segurança     
+                    if($administrador == 'S' || $tipousuario == 'S'){ ?>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Reservas<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="painel.php?controle=reservacolaboradorController&acao=listar">Saída de Veículo </a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=retornoveiculoController&acao=listar">Retorno de Veículo</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="painel.php?controle=listartodasreservasController&acao=listar">Relação de Todas as reservas</a></li>
+                                    </ul>
+                                </li>
+                            <?php }
+                         ?>
+                    <?php
+                         if($tipousuario != 'C'){ ?>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Relatórios<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:abrir('protected/view/relatoriosaida/filtrorelatoriosaida.php');">Saida de Veículo</a></li>
+                                </ul>
+                            </li>
+                        <?php }
                     ?>
+                    <li><a href="/locadoraveiculos/controlelogin/sair.php"  id="menutitle">Sair</a></li>
                     <li><label style="color: white">Usuário Logado: <?php echo $nomeusuariologado; ?></label></li>
                     
                 </ul>
@@ -352,7 +374,5 @@ require_once("config/confloginrel.php");
     <div style="display: none">
         <div id="dialogcancelarreserva" title="Cancelar Reserva"/><img src="includes/imagens/question.png" alt="" /><span>Tem certeza que deseja cancelar a reserva?</span></div>
     </div>
-
-    
 </body>
 </html>
