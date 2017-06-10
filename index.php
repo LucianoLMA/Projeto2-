@@ -65,7 +65,7 @@
                                                 <form action="controlelogin/conectado.php" method="POST">
                                                     <?php
                                                         if ($_GET != null) {
-                                                            echo "<div style='color: red; height: 34px;'><b>Login Inválido. Tente Novamente!.</b></div>";
+                                                            echo "<div style='color: red; height: 34px;'><b>Login ou Senha Inválidos.</b></div>";
                                                         }
                                                     ?>
                                                     <table>
