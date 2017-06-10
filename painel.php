@@ -74,7 +74,7 @@ require_once("config/confloginrel.php");
                 $("#dialogcancelarreserva").dialog("open");
             };
             
-            //Abre o pop-up dos relatórios
+            //Abre a janela pop-up dos relatórios
             function abrir(URL) {
                 var width = 590;
                 var height = 350;
@@ -144,7 +144,7 @@ require_once("config/confloginrel.php");
                 padding-top: 85px;
             }
 
-            /*Tema*/
+            /*Theme added*/
             .panel-primary>.panel-heading {
               color: #fff;
               background-color: #3D5B99;
@@ -205,7 +205,7 @@ require_once("config/confloginrel.php");
                 height: 50px;
                 background: #3D5B99
             }
-            /*CSS confirmação de senha*/
+            /*CSS confirmaçao de senha*/
             #mensagemlabelerro{
             	display: none;
             	color: red;
@@ -214,7 +214,7 @@ require_once("config/confloginrel.php");
     </head>
 </head>
 <?php
-    //Buscar o nome do usuário Logado -->
+    //Busca o nome do usuário Logado -->
     $cpflogado = $_SESSION['cpf'];
     $sqlconsultausuariologado = "select (usuario.nome || ' ' || usuario.sobrenome) as nomecolaborador,
                                         usuario.tipousuario as tipousuario,
@@ -246,14 +246,14 @@ require_once("config/confloginrel.php");
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="painel.php"  id="menutitle">Home</a></li>
-                    <?php //Se for Adminstrador
+                    <?php
                          if($administrador == 'S'){ ?>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenções<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="painel.php?controle=gerenteController&acao=listar">Manutenção de Gerente</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaborador</a></li>
+                                        <li><a href="painel.php?controle=colaboradorController&acao=listar">Manutenção de Colaboradores</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="painel.php?controle=segurancaController&acao=listar">Manutenção de Segurança</a></li>
                                         <li role="separator" class="divider"></li>
@@ -262,7 +262,7 @@ require_once("config/confloginrel.php");
                                 </li>
                          
                                 <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenção Gerais<span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Manutenções Gerais<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="painel.php?controle=veiculoController&acao=listar">Manutenção de Veículo</a></li>
                                         <li role="separator" class="divider"></li>
@@ -274,8 +274,7 @@ require_once("config/confloginrel.php");
                             <?php }
                          ?>
                     <?php
-                    //Admin e Segurança     
-                    if($administrador == 'S' || $tipousuario == 'S'){ ?>
+                         if($administrador == 'S' || $tipousuario == 'S'){ ?>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Reservas<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
