@@ -1,16 +1,21 @@
 <?php
 
-class VeiculoController {
+class SegurancaController {
     private $bd, $model;
+    private $segurancaModel;
+    private $cidadeModel;
     
     function __construct() {
-        require './protected/model/veiculoModel.php';
-        $this->model = new VeiculoModel();
+        require './protected/model/segurancaModel.php';
+        require './protected/model/cidadeModel.php';
+        $this->model = new SegurancaModel();
+        $this->modelCidade = new CidadeModel();
     }
     
     public function novo() {
-        $acao = 'painel.php?controle=veiculoController&acao=inserir';
-        require './protected/view/veiculo/formVeiculo.php';
+        $listaCidades  = $this->modelCidade->buscarTodos();
+        $acao = 'painel.php?controle=segurancaController&acao=inserir';
+        require './protected/view/seguranca/formSeguranca.php';
     }
     
     public function inserir(array $dados) {
@@ -29,13 +34,14 @@ class VeiculoController {
     
     public function listar() {
         $listaDados = $this->model->buscarTodos();
-        require './protected/view/veiculo/listVeiculo.php';
+        require './protected/view/seguranca/listSeguranca.php';
     }
     
     public function buscar($id) {
-        $veiculo = $this->model->buscar($id);
-        $acao = 'painel.php?controle=veiculoController&acao=atualizar';
-        require './protected/view/veiculo/formVeiculo.php';
+        $seguranca   = $this->model->buscar($id);
+        $listaCidades  = $this->modelCidade->buscarTodos();
+        $acao = 'painel.php?controle=segurancaController&acao=atualizar';
+        require './protected/view/seguranca/formSeguranca.php';
     }
     
     public function atualizar(array $dados) {
@@ -60,7 +66,7 @@ class VeiculoController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não é possível excluir o Veículo, pois possui registros dependentes.
+                    Não é possível excluir o Segurança, pois possui registros dependentes.
                   </div>';
         }
         $this->listar();

@@ -82,12 +82,12 @@
                 <label>Veículo</label>
                 <select name="idveiculo" id="idveiculo" class="form-control">
                     <?php
-                    $sqlVeiculo = "select v.id as idveiculo,
-                                        upper(v.modelo) as modelo
-                                   from reserva r
-                                  inner join veiculo v
-                                     on r.idveiculo = v.id
-                                  order by v.modelo asc;";
+                    $sqlVeiculo = "select distinct v.id as idveiculo,
+                                            upper(v.modelo) as modelo
+                                       from reserva r
+                                      inner join veiculo v
+                                         on r.idveiculo = v.id
+                                         order by modelo asc;";
                     $sqlVeiculoResult = pg_query($sqlVeiculo);
                     echo '<option value="">
                             Selecione...

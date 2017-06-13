@@ -75,7 +75,7 @@ class GerenteController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível excluir o Gerente.
+                    Não é possível excluir o Gerente pois, possui registros dependentes.
                   </div>';
         }
         $this->listar();

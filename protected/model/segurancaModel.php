@@ -1,17 +1,15 @@
 <?php
 
-class GerenteModel extends Conexao {
+class SegurancaModel extends Conexao {
 
     function __construct() {
         parent::__construct();
     }
 
     public function inserir(array $dados) {
-        $idsetor = $_POST['idsetor'];
-        $idcidade = $_POST['idcidade'];
-        $datanascimento = $_POST['datanascimento'];
         $cpf = $_POST['cpf'];
         $email = $_POST['email'];
+        $idcidade = $_POST['idcidade'];
         
         $consultacpf = "select count(*) as quantidadecpf from usuario where cpf = '$cpf'";
         $sqlconsultacpf = $this->bd->prepare($consultacpf);
@@ -22,7 +20,7 @@ class GerenteModel extends Conexao {
                 $quantidadecpf = $rs["quantidadecpf"];
             }
         }
-        
+		
         $consultaemail = "select count(*) as quantidadeemail from usuario where email = '$email'";
         $sqlconsultaemail = $this->bd->prepare($consultaemail);
         $sqlconsultaemail->execute();
@@ -39,20 +37,17 @@ class GerenteModel extends Conexao {
             echo "<script>alert('Este E-mail já encontra-se cadastrado na base de dados! Favor informe outro E-mail');</script>";
         }else{
             $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade, tipousuario) "
-                    . "          VALUES(:nome, :sobrenome, '$datanascimento', '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade, 'G')";
+                    . "          VALUES(:nome, :sobrenome, :datanascimento, '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade, 'S')";
             
             unset($dados['id']);
             unset($dados['cpf']);
             unset($dados['email']);
-            unset($dados['idsetor']);
             unset($dados['idcidade']);
-            unset($dados['datanascimento']);
+            unset($dados['confirmasenha']);
             unset($dados['tipousuario']);
-			unset($dados['confirmasenha']);
             $query = $this->bd->prepare($sql);
             $query->execute($dados);
-
-            // vincula o ultimo id com ultimo id do gerente
+            
             $usuarioregistro = "select max(id) as idusuario from usuario";
             $sqlusuarioregistro = $this->bd->prepare($usuarioregistro);
             $sqlusuarioregistro->execute();
@@ -62,50 +57,46 @@ class GerenteModel extends Conexao {
                     $idusuarioregistro = $rs["idusuario"];
                 }
             }
-
+            
             if($idusuarioregistro != null){
-                $sqlgerente = "INSERT INTO gerente(idsetor, idusuario) "
-                        . " VALUES($idsetor, $idusuarioregistro)";
+                $sqlseguranca = "INSERT INTO seguranca(idusuario) VALUES($idusuarioregistro)";
                 unset($dados['nome']);
+                unset($dados['datanascimento']);
                 unset($dados['sobrenome']);
                 unset($dados['telefone']);
                 unset($dados['celular']);
                 unset($dados['cnh']);
                 unset($dados['endereco']);
-                unset($dados['idcidade']);
                 unset($dados['senha']);
-                unset($dados['tipousuario']);
-                unset($dados['confirmasenha']);
-                $query = $this->bd->prepare($sqlgerente);
+                unset($dados['idestado']);
+                unset($dados['idcidade']);
+                
+                $query = $this->bd->prepare($sqlseguranca);
                 return $query->execute($dados);
             }
         }
-    }
+   }
 
     public function buscarTodos() {
-    	$sql = "select u.id,
-                        u.nome,
-                        u.sobrenome,
-                        (u.nome || ' ' || u.sobrenome) as nomegerente,
-                        to_char(u.datanascimento, 'dd/MM/yyyy') as datanascimento,
-                        u.cpf,
-                        u.telefone,
-                        u.celular,
-                        u.cnh,
-                        u.endereco,
-                        u.email,
-                        (cid.nome || ' - ' || est.uf) as nomecidade,
-                        g.id as idgerente
-                   from usuario u
-                  inner join gerente g
-                     on g.idusuario = u.id
-                  inner join cidade cid
-                     on cid.id = u.idcidade
-                  inner join setor s
-                     on g.idsetor = s.id 
-                  inner join estado est
-                     on cid.idestado = est.id
-                  order by u.nome asc;";
+    	$sql = "select cu.id,
+                        (cu.nome || ' ' || cu.sobrenome) as nomeseguranca, 
+                        to_char(cu.datanascimento, 'dd/MM/yyyy') as datanascimento,
+                        cu.cpf,
+                        cu.telefone,
+                        cu.celular,
+                        cu.cnh,
+                        cu.endereco,
+                        cu.email,
+                        ci.nome || ' - ' || est.uf as cidadeestado,
+                        c.id as idseguranca
+                   from seguranca c 
+                inner join usuario cu 
+                          on c.idusuario = cu.id 
+                inner join cidade ci 
+                          on cu.idcidade = ci.id
+                inner join estado est 
+                          on ci.idestado = est.id
+                order by cu.nome asc;";
         $query = $this->bd->query($sql);
         return $query->fetchAll();
     }
@@ -123,15 +114,13 @@ class GerenteModel extends Conexao {
                        u.endereco,
                        u.idcidade,
                        u.email,
-                       u.idcidade,
-                       g.idsetor
+                       u.idcidade
                    from usuario u
-                  inner join gerente g
-                     on g.idusuario = u.id
-                  WHERE u.id = :id";
+                  inner join seguranca c
+                     on c.idusuario = u.id
+                 WHERE c.id = :id";
         $query = $this->bd->prepare($sql);
         $query->execute(array('id' => $id));
-
         return $query->fetch();
     }
 
@@ -140,8 +129,8 @@ class GerenteModel extends Conexao {
         $datanascimento = $_POST['datanascimento'];
         $cpf            = $_POST['cpf'];
         $email          = $_POST['email'];
-        $idsetor        = $_POST['idsetor'];
         $idcidade       = $_POST['idcidade'];
+        
         
         $sql = "UPDATE usuario 
                    SET nome           = :nome,
@@ -153,62 +142,76 @@ class GerenteModel extends Conexao {
                        cnh            = :cnh,
                        senha          = :senha,
                        endereco       = :endereco,
-                       idcidade       = $idcidade,
                        email          = '$email',
-                       tipousuario    = 'G'
+                       idcidade       = $idcidade
                  WHERE id = $id";
         unset($dados['id']);
-        unset($dados['idsetor']);
         unset($dados['datanascimento']);
         unset($dados['cpf']);
-        unset($dados['idcidade']);
         unset($dados['email']);
-        unset($dados['tipousuario']);
+        unset($dados['idcidade']);
         unset($dados['confirmasenha']);
         $query = $this->bd->prepare($sql);
         $query->execute($dados);
         
-        //Verifica o registro usuario para alterar
-        $verificaregistrousuario = "select g.id as idusuario from usuario u inner join gerente g on g.idusuario = u.id where g.idusuario = $id";
+        
+        $verificaregistrousuario = "select u.id as idusuario, c.id as idseguranca 
+                                      from usuario u 
+                                inner join seguranca c 
+                                        on c.idusuario = u.id 
+                                     where c.idusuario = $id";
         $sqlverificaregistrousuario = $this->bd->prepare($verificaregistrousuario);
         $sqlverificaregistrousuario->execute();
         if ($sqlverificaregistrousuario->rowCount() > 0) {
             foreach ($sqlverificaregistrousuario as $rs) {   
                 $verificaidregistrousuario = $rs["idusuario"];
+                $idseguranca = $rs["idseguranca"];
             }
         }
         
-        //Atualiza gerente
+        //Atualiza segurança
         if($verificaidregistrousuario != null){
-            $sqlGerente = "UPDATE gerente
-                              SET idsetor = $idsetor,
-                                  idusuario = $id
-                            WHERE id = $verificaidregistrousuario";
-            
+            $sqlSeguranca = "UPDATE seguranca
+                                    SET idusuario = $verificaidregistrousuario
+                                  WHERE id = $idseguranca";
             unset($dados['nome']);
             unset($dados['sobrenome']);
             unset($dados['telefone']);
             unset($dados['celular']);
             unset($dados['cnh']);
             unset($dados['endereco']);
-            unset($dados['idcidade']);
-            unset($dados['senha']);
-            unset($dados['tipousuario']);
-			unset($dados['confirmasenha']);
-            $query = $this->bd->prepare($sqlGerente);
+            unset($dados['cidade']);
+            unset($dados['confirmasenha']);
+            $query = $this->bd->prepare($sqlSeguranca);
             return $query->execute($dados);
         }
         
     }
 
     public function excluir($id) {
-        $idusuario = $_GET['id'];
+        $idseguranca = $_GET['id'];
+        $verificaregistro = "select us.id as idusuario,
+                                    se.id as idseguranca
+                               from seguranca se
+                              inner join usuario us
+                                 on se.idusuario = us.id
+                              where se.id = $id;";
+        $sqlverificaregistro = $this->bd->prepare($verificaregistro);
+        $sqlverificaregistro->execute();
+        if ($sqlverificaregistro->rowCount() > 0) {
+            foreach ($sqlverificaregistro as $rs) {   
+                $idusuario = $rs["idusuario"];
+                $idseguranca = $rs["idseguranca"];
+                
+            }
+        }
         
-        $gerente    = "delete from gerente where idusuario = $idusuario";
-        $sqlgerente = $this->bd->prepare($gerente);
-        $this->bd->prepare($gerente);
-        $sqlgerente->execute();
-       
+        $seguranca    = "delete from seguranca where id = $idseguranca";
+        $sqlseguranca = $this->bd->prepare($seguranca);
+        $this->bd->prepare($seguranca);
+        $sqlseguranca->execute();
+        
+        
         $usuario = "delete from usuario where id = $idusuario";
         $sqlusuario = $this->bd->prepare($usuario);
         return $sqlusuario->execute();

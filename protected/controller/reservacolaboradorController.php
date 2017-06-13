@@ -4,6 +4,7 @@ class ReservacolaboradorController {
     private $bd, $model;
     public $controleSql;
     public $dados;
+    private $reservacolaboradorModel;
     
     function __construct() {
         require './protected/model/reservacolaboradorModel.php';
@@ -14,17 +15,13 @@ class ReservacolaboradorController {
     public function listar() {
         if(isset($_POST['placa']) != null){
             $idreserva = $_POST['idreserva'];
-            $placa = $_POST['placa'];
-            $destino = $_POST['destino'];
-            $motivo = $_POST['motivo'];
             $condicao = $_POST['condicao'];
-            $kmfinal = $_POST['kmfinal'];
             $atualizaDados = $this->model->updateReserva($idreserva, $condicao);
-            
         }else{
+            
             $acao = "painel.php?controle=reservacolaboradorController&acao=filtroReservacolaborador";
             
-            # Executa uma busca pelo filtro de situacao
+            //pesquisa pelo filtro
             if(isset($this->dados['fazBusca'])){
                 $listaDados = $this->model->buscarFiltroReservaColaborador($this->dados['cpf']);
             }
@@ -34,10 +31,15 @@ class ReservacolaboradorController {
     
     public function filtroReservacolaborador(array $dados){
             $dados['fazBusca'] = true;
-
             $this->dados = $dados;
-
             $this->listar();
+            
+    }
+    
+    public function buscar($id) {
+        $reservacolaborador   = $this->model->buscar($id);
+        $acao = 'painel.php?controle=reservacolaboradorController&acao=filtroReservacolaborador';
+        require './protected/view/reservacolaborador/formReservacolaborador.php';
     }
     
     public function listartodos(){

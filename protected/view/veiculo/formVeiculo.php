@@ -1,6 +1,6 @@
 <div class="col-md-12 col-offset-2">
     <div class="panel panel-primary">
-        <div class="panel-heading">Cadastrar Veículo</div>
+        <div class="panel-heading">Cadastro de Veículo</div>
         <div class="panel-body">
             <form action="<?php echo $acao; ?>" name="formVeiculo" id="formVeiculo" method="POST" class="form" role="form" enctype="multipart/form-data">
                 <div class="row">
@@ -61,22 +61,33 @@
                                value="<?php if (isset($veiculo)) echo $veiculo['kmfinal']; ?>" required>
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-md-3">
                         <label for="imagem">Imagem do Veículo</label>
                         <input name="arquivo" type="file" required=""/>
                         <?php
-                            //pede foto qdo alterar um veiculo
+                            //Cairá neste teste sempre que o usuário for alterar um registro
                             if(isset($veiculo['nomefoto']) != null){
                                 if($veiculo['nomefoto'] == ''){
-                                    echo '<img src = "http://localhost/locadoraveiculos/protected/imagens/noimagens/noimagem.png" style="width: 100px;"/>';   
+                                    if( isset($_SERVER['HTTPS'] ) ) {
+                                        $prefixo = 'https://';
+                                    }else{
+                                        $prefixo = 'http://';
+                                    }
+                                    $urlbase = $prefixo . ''. $_SERVER['HTTP_HOST']. '/locadoraveiculos/protected/imagens/noimagens/noimagem.png';
+                                    echo '<img src = "' . "$urlbase". '" style="width: 100px;"/>';   
                                 }else{
                                     echo '<img src = "' . $veiculo['caminhonomefoto'] . '" style="width: 100px; heigth: 80px;"/>';
                                 }
-                            }//pede foto qdo cadastrar um novo veiculo
+                            }//Cairá nesse teste sempre que o usuário for inserir um novo veículo
                             else{
-                                echo '<img src = "http://localhost/locadoraveiculos/protected/imagens/noimagens/noimagem.png" style="width: 100px;"/>';   
+                                if(isset($_SERVER['HTTPS'] ) ) {
+                                    $prefixo = 'https://';
+                                }else{
+                                    $prefixo = 'http://';
+                                }
+                                $urlbase = $prefixo . ''. $_SERVER['HTTP_HOST']. '/locadoraveiculos/protected/imagens/noimagens/noimagem.png';
+                                echo '<img src = "' . "$urlbase". '" style="width: 100px;"/>';   
                             }
                         ?>
                     </div>

@@ -7,7 +7,7 @@ class ColaboradorModel extends Conexao {
     }
 
     public function inserir(array $dados) {
-        //Primeiro faz insert na tabela usuario
+        //1ª faz insert na tabela usuario
         $datanascimento = $_POST['datanascimento'];
         $cpf = $_POST['cpf'];
         $email = $_POST['email'];
@@ -38,12 +38,13 @@ class ColaboradorModel extends Conexao {
         }
         
         if($quantidadecpf >= 1){
-            echo "<script>alert('CPF já cadastrado! Favor informe outro CPF');</script>";
+            echo "<script>alert('Este CPF já cadastrado na base de dados! Favor informe outro CPF');</script>";
         }else if($quantidadeemail >= 1){
-            echo "<script>alert('E-mail já cadastrado! Favor informe outro E-mail');</script>";
+            echo "<script>alert('Este E-mail já cadastrado na base de dados! Favor informe outro E-mail');</script>";
         }else{ 
-            $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade) "
-                    . "          VALUES(:nome, :sobrenome, '$datanascimento', '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade)";
+            //O CPF e o e-mail não estão cadastrados grava colaborador
+            $sql = "INSERT INTO usuario(nome, sobrenome, datanascimento, cpf, telefone, celular, cnh, senha, endereco, email, idcidade, tipousuario) "
+                    . "          VALUES(:nome, :sobrenome, '$datanascimento', '$cpf', :telefone, :celular, :cnh, :senha, :endereco, '$email', $idcidade, 'C')";
             unset($dados['id']);
             unset($dados['cpf']);
             unset($dados['email']);
@@ -51,10 +52,11 @@ class ColaboradorModel extends Conexao {
             unset($dados['idgerente']);
             unset($dados['idcidade']);
             unset($dados['datanascimento']);
+            unset($dados['tipousuario']);
+			unset($dados['confirmasenha']);
             $query = $this->bd->prepare($sql);
             $query->execute($dados);
             
-            //Faz o insert no usuario, pega o ultimo id e atribui para o colaborador
             $usuarioregistro = "select max(id) as idusuario from usuario";
             $sqlusuarioregistro = $this->bd->prepare($usuarioregistro);
             $sqlusuarioregistro->execute();
@@ -78,6 +80,8 @@ class ColaboradorModel extends Conexao {
                 unset($dados['idestado']);
                 unset($dados['idcidade']);
                 unset($dados['senha']);
+                unset($dados['tipousuario']);
+				unset($dados['confirmasenha']);
                 $query = $this->bd->prepare($sqlgerente);
                 return $query->execute($dados);
             }
@@ -85,36 +89,33 @@ class ColaboradorModel extends Conexao {
     }
 
     public function buscarTodos() {
-    	$sql = "select u.id,
-                        (u.nome || ' ' || u.sobrenome) as nomecolaborador,
-                        (select (u.nome || ' ' || u.sobrenome) as nomegerente
-                           from gerente ge
-                          inner join usuario u
-                             on ge.idusuario = u.id
-                          inner join colaborador c
-                             on c.idgerente = ge.id) as nomegerente,
-                        to_char(u.datanascimento, 'dd/MM/yyyy') as datanascimento,
-                        u.cpf,
-                        u.telefone,
-                        u.celular,
-                        u.cnh,
-                        u.endereco,
-                        u.email,
+    	$sql = "select cu.id,
+                        gu.nome || ' ' || gu.sobrenome as nomegerente,
+                        cu.nome || ' ' || cu.sobrenome as nomecolaborador, 
+                        to_char(cu.datanascimento, 'dd/MM/yyyy') as datanascimento,
+                        cu.cpf,
+                        cu.telefone,
+                        cu.celular,
+                        cu.cnh,
+                        cu.endereco,
+                        cu.email,
                         ci.nome || ' - ' || est.uf as cidadeestado,
                         s.nome as nomesetor,
                         c.id as idcolaborador
-                   from usuario u
-                  inner join colaborador c
-                     on c.idusuario = u.id
-                  inner join setor s
-                     on c.idsetor = s.id
-                  inner join gerente g
-                     on c.idgerente = g.id
-                  inner join cidade ci
-                     on u.idcidade = ci.id
-                  inner join estado est
-                     on ci.idestado = est.id
-                  order by u.nome asc;";
+                   from colaborador c 
+                inner join usuario cu 
+                          on c.idusuario = cu.id 
+                inner join gerente g 
+                          on c.idgerente = g.id   
+                inner join usuario gu 
+                          on g.idusuario = gu.id 
+                inner join setor s 
+                          on c.idsetor = s.id
+                inner join cidade ci 
+                          on cu.idcidade = ci.id
+                inner join estado est 
+                          on ci.idestado = est.id
+                order by cu.nome asc;";
         $query = $this->bd->query($sql);
         return $query->fetchAll();
     }
@@ -137,7 +138,10 @@ class ColaboradorModel extends Conexao {
                        (select usu.id
                           from gerente ge
                     inner join usuario usu
-                            on ge.idusuario = usu.id) as idgerente,
+                            on ge.idusuario = usu.id
+                    inner join colaborador co
+                            on co.idgerente = ge.id
+                         where co.id = :id) as idgerente,
                        c.idusuario
                    from usuario u
                   inner join colaborador c
@@ -169,7 +173,8 @@ class ColaboradorModel extends Conexao {
                        senha          = :senha,
                        endereco       = :endereco,
                        email          = '$email',
-                       idcidade       = $idcidade
+                       idcidade       = $idcidade,
+                       tipousuario    = 'C'
                  WHERE id = $id";
         unset($dados['id']);
         unset($dados['idsetor']);
@@ -178,10 +183,12 @@ class ColaboradorModel extends Conexao {
         unset($dados['email']);
         unset($dados['idgerente']);
         unset($dados['idcidade']);
+        unset($dados['tipousuario']);
+		unset($dados['confirmasenha']);
         $query = $this->bd->prepare($sql);
         $query->execute($dados);
         
-        //Verifica o registro usuario para alterar
+        
         $verificaregistrousuario = "select u.id as idusuario, c.id as idcolaborador 
                                       from usuario u 
                                 inner join colaborador c 
@@ -197,7 +204,7 @@ class ColaboradorModel extends Conexao {
             }
         }
         
-        //Atualiza colaborador
+        //Atualiza gerente
         if($verificaidregistrousuario != null){
             $sqlColaborador = "UPDATE colaborador
                            SET idsetor   = $idsetor,
@@ -212,6 +219,8 @@ class ColaboradorModel extends Conexao {
             unset($dados['endereco']);
             unset($dados['cidade']);
             unset($dados['senha']);
+            unset($dados['tipousuario']);
+			unset($dados['confirmasenha']);
             $query = $this->bd->prepare($sqlColaborador);
             return $query->execute($dados);
         }

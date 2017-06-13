@@ -8,12 +8,10 @@ class CidadeModel extends Conexao {
 
     public function inserir(array $dados) {
         $nomecidade = $_POST['nome'];
-        //Verifica se a cidade cadastrada ja existe
-        $consultacidade = "select count(*) as quantidadecidade from cidade where nome =  '$nomecidade'";
+        //Ve se a cidade ja existe
+        $consultacidade = "select count(*) as quantidadecidade from cidade where nome = '$nomecidade'";
         $sqlconsultacidade = $this->bd->prepare($consultacidade);
         $sqlconsultacidade->execute();
-        // exemplo
-        //$this->bd->query("select * from InsereCidade('Ijui',24);"); pra puxar de uma funcao
         
         if ($sqlconsultacidade->rowCount() > 0) {
             foreach ($sqlconsultacidade as $rs){
@@ -21,7 +19,7 @@ class CidadeModel extends Conexao {
             }
         }
         if($quantidadecidade == 1){
-            echo "<script>alert('Cidade já cadastrada! Favor informe outra Cidade');</script>";
+            echo "<script>alert('Esta Cidade já cadastrada na base de dados! Favor informe outra Cidade');</script>";
         }else{
             $sql = "INSERT INTO cidade(nome, idestado)  VALUES(:nome, :idestado)";
             unset($dados['id']);
@@ -59,8 +57,7 @@ class CidadeModel extends Conexao {
 
     public function atualizar(array $dados) {
         $nomecidade = $_POST['nome'];
-        
-        //Verifica se a cidade cadastrada ja existe
+
         $consultacidade = "select count(*) as quantidadecidade from cidade where nome = '$nomecidade'";
         $sqlconsultacidade = $this->bd->prepare($consultacidade);
         $sqlconsultacidade->execute();
@@ -71,7 +68,7 @@ class CidadeModel extends Conexao {
             }
         }
         if($quantidadecidade == 1){
-            echo "<script>alert('Cidade já cadastrada! Favor informe outra Cidade');</script>";
+            echo "<script>alert('Esta Cidade já cadastrada na base de dados! Favor informe outra Cidade');</script>";
         }else{
             $sql = "UPDATE cidade 
                        SET nome           = :nome,

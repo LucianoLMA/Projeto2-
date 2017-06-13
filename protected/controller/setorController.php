@@ -60,7 +60,7 @@ class SetorController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível excluir o Setor.
+                    Não é possível excluir o Setor, pois possui registros dependentes.
                   </div>';
         }
         $this->listar();

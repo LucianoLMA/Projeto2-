@@ -1,9 +1,9 @@
 <div class="col-md-12 col-offset-2">
     <div class="panel panel-primary">
-        <div class="panel-heading">Cadastrar Nova Reserva</div>
+        <div class="panel-heading">Cadastro de Reserva</div>
         <div class="panel-body">
             
-            <form action="<?php echo $acao; ?>" name="formReserva" id="formReserva" method="POST" class="form" role="form" onchange="return checarDatas()">
+            <form action="<?php echo $acao; ?>" name="formReserva" id="formReserva" method="POST" class="form" role="form">
                 <input type="hidden" class="form-control" id="cpf" name="cpf" readonly="true" value="<?php echo $_SESSION['cpf']; ?>">
                 <div class="row">
                     <div class="col-md-1">
@@ -33,24 +33,28 @@
                     <div class="col-md-3">
                         <label for="datasaidaprev">Data Previsão Saída</label>
                         <input type="text" class="form-control" id="data" name="datasaidaprev" placeholder="Informe a Data Prev. Saída" 
-                                       value="<?php if (isset($reserva)) echo $reserva['datasaidaprev']; ?>" required>
+                               value="<?php if (isset($reserva)) echo $reserva['datasaidaprev']; ?>" onchange="validaDataPrevReserva();" required>
+                        <div id="mensagemdataprevisaosaida"></div>
                     </div>
                     <div class="col-md-3">
                         <label for="horasaidaprev">Hora Previsão Saída</label>
                         <input type="text" class="form-control" id="horaprevsaida" name="horasaidaprev" placeholder="Informe a Hora Prev. Saída" 
-                                      OnKeyUp="Mascara_Hora('horaprevsaida')" value="<?php if (isset($reserva)) echo $reserva['horasaidaprev']; ?>" required>
+                                      OnKeyUp="Mascara_Hora('horaprevsaida')" onchange="validaHoraPrevisaoSaida();" value="<?php if (isset($reserva)) echo $reserva['horasaidaprev']; ?>" required>
+                        <div id="mensagemhoraprevisaosaida"></div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
                         <label for="dataretprev">Data Previsão Retorno</label>
                         <input type="text" class="form-control" id="dataprevretorno" name="dataretprev" placeholder="Informe a Data Retorno Saída" 
-                                       value="<?php if (isset($reserva)) echo $reserva['dataretprev']; ?>" required>
+                                       value="<?php if (isset($reserva)) echo $reserva['dataretprev']; ?>" onchange="validaDataPrevRetorno();" required>
+                        <div id="mensagemdataprevisaoretorno"></div>
                     </div>
                     <div class="col-md-3">
                         <label for="horaretprev">Hora Previsão Retorno</label>
                         <input type="text" class="form-control" id="horaprevretorno" name="horaretprev" placeholder="Informe a Hora Retorno Previsto" 
-                                     OnKeyUp="Mascara_Hora('horaprevretorno')"  value="<?php if (isset($reserva)) echo $reserva['horasaidaprev']; ?>" required>
+                                     OnKeyUp="Mascara_Hora('horaprevretorno')" onchange="validaHoraPrevisaoRetorno();"  value="<?php if (isset($reserva)) echo $reserva['horasaidaprev']; ?>" required>
+                        <div id="mensagemhoraprevisaoretorno"></div>
                     </div>
                 </div>
                 <div class="row">

@@ -11,7 +11,7 @@ require_once("config/confloginrel.php");
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Locadora Veículos</title>
+        <title>Security Cars</title>
         
         <!-- Excluir Registro - Mensagem-->
         <link rel="shortcut icon" type="image/png" href="includes/imagens/veiculo.png"/>
@@ -74,7 +74,7 @@ require_once("config/confloginrel.php");
                 $("#dialogcancelarreserva").dialog("open");
             };
             
-            //Abre a janela pop-up dos relatórios
+            //Abre o pop-up dos relatórios
             function abrir(URL) {
                 var width = 590;
                 var height = 350;
@@ -205,7 +205,7 @@ require_once("config/confloginrel.php");
                 height: 50px;
                 background: #3D5B99
             }
-            /*CSS confirmaçao de senha*/
+            /*CSS REFERENTE AS CONFIRMAÇÕES DE SENHA*/
             #mensagemlabelerro{
             	display: none;
             	color: red;
@@ -214,7 +214,7 @@ require_once("config/confloginrel.php");
     </head>
 </head>
 <?php
-    //Busca o nome do usuário Logado -->
+    //Busca o nome do usuário logado
     $cpflogado = $_SESSION['cpf'];
     $sqlconsultausuariologado = "select (usuario.nome || ' ' || usuario.sobrenome) as nomecolaborador,
                                         usuario.tipousuario as tipousuario,
@@ -241,7 +241,7 @@ require_once("config/confloginrel.php");
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#" style=" padding-left: 25px;"  id="menutitle">Locadora Veículos</a>
+                <a class="navbar-brand" href="#" style=" padding-left: 25px;"  id="menutitle">Security Cars</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -282,7 +282,7 @@ require_once("config/confloginrel.php");
                                         <li role="separator" class="divider"></li>
                                         <li><a href="painel.php?controle=retornoveiculoController&acao=listar">Retorno de Veículo</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="painel.php?controle=listartodasreservasController&acao=listar">Relação de Todas as reservas</a></li>
+                                        <li><a href="painel.php?controle=listartodasreservasController&acao=listar">Relação de Todas as Reservas</a></li>
                                     </ul>
                                 </li>
                             <?php }
@@ -292,7 +292,7 @@ require_once("config/confloginrel.php");
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"  id="menutitle" aria-expanded="false">Relatórios<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="javascript:abrir('protected/view/relatoriosaida/filtrorelatoriosaida.php');">Saida de Veículo</a></li>
+                                    <li><a href="javascript:abrir('protected/view/relatoriosaida/filtrorelatoriosaida.php');">Saída de Veículo</a></li>
                                 </ul>
                             </li>
                         <?php }

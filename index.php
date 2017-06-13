@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Locadora Veículos</title>
+        <title>Security Cars</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="all" />
         <!-- Mobile Meta -->
@@ -107,7 +107,7 @@
                         <div class="subfooter-inner">
                             <div class="row">
                                 <div class="col-md-12 wpn-copyright">
-                                    <p class="text-center white">® 2017 Locadora Veículos - Direitos reservados</p>
+                                    <p class="text-center white">® 2017 Security Cars - Direitos reservados</p>
                                 </div>
                                 <div class="col-md-12">
                                     <p class="text-center white">Desenvolvimento <b>Luciano Machado</b> </p>

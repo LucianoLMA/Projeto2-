@@ -1,6 +1,6 @@
 <div class="col-md-12 col-offset-2">
     <div class="panel panel-primary">
-        <div class="panel-heading">Cadastrar Setor</div>
+        <div class="panel-heading">Cadastro de Setor</div>
         <div class="panel-body">
             <form action="<?php echo $acao; ?>" name="formSetor" id="formSetor" method="POST" class="form" role="form">
                 <div class="row">

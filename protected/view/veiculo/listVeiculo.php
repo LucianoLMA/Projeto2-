@@ -1,7 +1,7 @@
 <div id="fundo">
     <div class="col-md-12">
         <div class="panel panel-primary">
-            <div class="panel-heading">Veículos Cadastrados</div>
+            <div class="panel-heading">Listagem de Veículos</div>
             <div class="panel-body">
                 <a href="painel.php?controle=veiculoController&acao=novo">
                     <span class='glyphicon glyphicon-plus'> Adicionar</span>

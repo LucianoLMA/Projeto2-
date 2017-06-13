@@ -4,6 +4,7 @@ class RetornoveiculoController {
     private $bd, $model;
     public $controleSql;
     public $dados;
+    private $retornoveiculoModel;
     
     function __construct() {
         require './protected/model/retornoveiculoModel.php';
@@ -14,9 +15,7 @@ class RetornoveiculoController {
     public function listar() {
         if(isset($_POST['placa']) != null){
             $idreserva = $_POST['idreserva'];
-            $placa = $_POST['placa'];
             $observacao = $_POST['observacao'];
-            $motivo = $_POST['motivo'];
             $condicao = $_POST['condicao'];
             $kmret = $_POST['kmretorno'];
             $kmretorno = str_replace("," , "" , $kmret);
@@ -30,7 +29,7 @@ class RetornoveiculoController {
         }else{
             $acao = "painel.php?controle=retornoveiculoController&acao=filtroRetornoveiculo";
             
-            # Executa uma busca pelo filtro de situacao
+            // busca pelo cpf
             if(isset($this->dados['fazBusca'])){
                 $listaDados = $this->model->filtroRetornoveiculo($this->dados['cpf']);
             }
@@ -44,6 +43,12 @@ class RetornoveiculoController {
             $this->dados = $dados;
 
             $this->listar();
+    }
+    
+    public function buscar($id) {
+        $retornoveiculo   = $this->model->buscar($id);
+        $acao = 'painel.php?controle=retornoveiculoController&acao=filtroRetornoveiculo';
+        require './protected/view/retornoveiculo/formRetornoveiculo.php';
     }
     
     public function listartodos(){

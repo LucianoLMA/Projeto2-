@@ -1,5 +1,4 @@
 $(document).ready(function ($) {
-    $("#kmmascarainicial").maskMoney({decimal: '.'});
     $("#kmmascarafinal").maskMoney({decimal: '.'});
     $("#kmretorno").maskMoney({decimal: '.'});
     $("#cpf_atualizado").mask("999.999.999-99");
@@ -54,7 +53,7 @@ $(document).ready(function ($) {
     });
 });
 
-//Testar se a hora é válida
+//Testa se a hora é válida
 function Mascara_Hora(Campo){
     var hora01 = '';
     var Hora = document.getElementById(Campo).value;
@@ -89,6 +88,8 @@ function Verifica_Hora(Campo){
     }
 }
 
+
+//Remover virgula por nada
 function removervirgulapornada(){ 
     var string = $('#kmmascarainicial').val();
     string = string.replace(',','');
@@ -99,7 +100,7 @@ function removervirgulapornada(){
     $('#kmmascarafinal').val(string);
 }
      
-//Formatação CPF
+//CPF
 function verifica_cpf_atualizado(valor) {
     valor = valor.toString();
     valor = valor.replace(/[^0-9]/g, '');
@@ -176,6 +177,7 @@ function formata_cpf_atualizado(valor) {
 
 $(function(){
     $('#cpf_atualizado').blur(function(){
+        //Se os numeros sao todos iguais
         var valorvariavel = document.getElementById('cpf_atualizado').value;
         if(valorvariavel === '000.000.000-00' ||
            valorvariavel === '111.111.111-11' || 
@@ -196,7 +198,7 @@ $(function(){
         if ( formata_cpf_atualizado(cpf_atualizado)) {
             $(this).val( formata_cpf_atualizado(cpf_atualizado));
         } else {
-            //Testa se CPF é valido
+            //V se o CPF é valido
             var valorvariavel = document.getElementById('cpf_atualizado').value;
             if(valorvariavel !== ''){
                 alert('CPF Inválido por favor digite novamente!');
@@ -209,7 +211,7 @@ $(function(){
 });
 //Fim CPF
 
-//Função somente Números
+//Somente Números
 function Onlynumbers(e)
 {
     var tecla = new Number();
@@ -227,7 +229,7 @@ function Onlynumbers(e)
     }
 }
 
-//Função Somente Letras
+//Somente Letras
 function Onlychars(e)
 {
     var tecla = new Number();
@@ -270,7 +272,7 @@ $(document).ready(function ($) {
     }
 });
 
-//Confirmações de senha do Gerente
+//Validar as confirmações de senha do Gerente
 function verificarSenhas(){
     if (document.formGerente.senha.value == document.formGerente.confirmasenha.value){
         $('#mensagemlabelerro').hide();
@@ -285,7 +287,7 @@ function verificarSenhas(){
     }
 };
 
-//Confirmações de senha do Colaborador
+//Validar as confirmações de senha do Colaborador
 function verificarSenhasColaborador(){
     if (document.formColaborador.senha.value == document.formColaborador.confirmasenha.value){
         $('#mensagemlabelerro').hide();
@@ -300,7 +302,7 @@ function verificarSenhasColaborador(){
     }
 };
 
-//Confirmações de senha do Segurança
+//Validar as confirmações de senha do Segurança
 function verificarSenhasSeguranca(){
     if (document.formSeguranca.senha.value == document.formSeguranca.confirmasenha.value){
         $('#mensagemlabelerro').hide();
@@ -315,7 +317,7 @@ function verificarSenhasSeguranca(){
     }
 };
 
-//Validar se Colaborador ou Gerente é maior de idade ou não
+//Validar data de nascimento >18 anos
 function getIdade(data) {
    var hoje = new Date();
    var nascimento = new Date(convertDateMMDDYYY(data.split("/")));
@@ -334,15 +336,23 @@ function convertDateMMDDYYY(datearray) {
 function maiorIdade(){
   var data = document.getElementById("data");
   if(getIdade(data.value) < 18){
-      document.getElementById("maiordeidade").innerHTML= "<div style='color: red; font-size: 12px;'><b>Usuário menor de idade. É necessário informar um usuário maior de idade para dar continuidade no cadastro!</b></style>";
+      document.getElementById("maiordeidade").innerHTML= "<div style='color: red; font-size: 12px;'><b>Usuário menor de idade. O usuário precisa ter mais de 18 anos!</b></style>";
       document.getElementById("data").value = '';
       document.getElementById("data").focus();
   }else{
       document.getElementById("maiordeidade").innerHTML= "";
   }
 }
-
+// Valida data previsao saida
 function validaDataPrevReserva(){
+	nowdata = new Date;
+	dataautomatica = nowdata.getDate();
+	if(dataautomatica < 10){
+		dataatualformatada = '0' + dataautomatica;
+	}else{
+		dataatualformatada = dataautomatica;
+	}
+
     now = new Date;
     mes = now.getMonth() + 1;
     if(mes < 10){
@@ -350,11 +360,13 @@ function validaDataPrevReserva(){
     }else{
         mesatual = mes;
     }
-    
-    dataatual = now.getDate() + '/' + mesatual + "/" + now.getFullYear();
+
+    dataatual = dataatualformatada + '/' + mesatual + "/" + now.getFullYear();
+
     datadocampo = document.getElementById("data").value;
+
     if(dataatual > datadocampo){
-        document.getElementById("mensagemdataprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data, pois a data informada é menor que a data atual!</b></style>";
+        document.getElementById("mensagemdataprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data. A data informada não pode ser menor que a data atual!</b></style>";
         document.getElementById("data").value = '';
         document.getElementById("data").focus();
     }else{
@@ -365,42 +377,52 @@ function validaDataPrevReserva(){
 //Validação de Hora Previsão Saida
 function validaHoraPrevisaoSaida(){
     now = new Date;
-    //Verificar se a data é menor que a data atual
+    
     hora = now.getHours();
     minutos = now.getMinutes();
     horaprevinformada = document.getElementById("horaprevsaida").value;
-    //remove os : do campo para comparar a hora
-    horaprevinformada = horaprevinformada.replace(/\:/g, '');
+    horaprevsaidainformada = horaprevinformada.replace(/\:/g, '');
     if(minutos < 10){
         horaatualminutos = '0' + minutos;
     }else{
         horaatualminutos = minutos;
     }
     horaatual = hora + '' + horaatualminutos;
-    
-    if(horaatual > horaprevinformada){
-        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir a hora, pois a hora informada é menor que a hora atual!</b></style>";
-        document.getElementById("horaprevsaida").value = '';
-        document.getElementById("horaprevsaida").focus();
-    }else{
-        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "";
+
+    if(dataatual == datadocampo){
+    	//Verifica se a hora informada é menor ou igual a hora atual
+    	if(horaatual > horaprevsaidainformada){
+	        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa hora. A hora informada não pode ser menor que a hora atual!</b></style>";
+	        document.getElementById("horaprevsaida").value = '';
+	        document.getElementById("horaprevsaida").focus();
+	    }else{
+	        document.getElementById("mensagemhoraprevisaosaida").innerHTML= "";
+	    }
     }
 }
 
 //Validação de Data Previsão Retorno
 function validaDataPrevRetorno(){
+	nowdata = new Date;
+	dataautomatica = nowdata.getDate();
+	if(dataautomatica < 10){
+		dataatualformatada = '0' + dataautomatica;
+	}else{
+		dataatualformatada = dataautomatica;
+	}
+
     now = new Date;
     mes = now.getMonth() + 1;
-    
     if(mes < 10){
         mesatual = '0' + mes;
     }else{
         mesatual = mes;
     }
-    dataatual = now.getDate() + '/' + mesatual + "/" + now.getFullYear();
-    datadocampo = document.getElementById("dataprevretorno").value;
-    if(dataatual > datadocampo){
-        document.getElementById("mensagemdataprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data, pois a data informada é menor que a data atual!</b></style>";
+    dataatualprevretorno = dataatualformatada + '/' + mesatual + "/" + now.getFullYear();
+    datadocamporetorno = document.getElementById("dataprevretorno").value;
+
+    if(datadocampo > datadocamporetorno){
+        document.getElementById("mensagemdataprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa data. A data informada não pode ser menor que a data de saída!</b></style>";
         document.getElementById("dataprevretorno").value = '';
         document.getElementById("dataprevretorno").focus();
     }else{
@@ -413,9 +435,10 @@ function validaHoraPrevisaoRetorno(){
     now = new Date;
     hora = now.getHours();
     minutos = now.getMinutes();
-    //Verificar se a data é menor que a data atual
-    
+
+
     horaprevinformada = document.getElementById("horaprevretorno").value;
+
     horaprevinformada = horaprevinformada.replace(/\:/g, '');
     
     if(minutos < 10){
@@ -425,11 +448,15 @@ function validaHoraPrevisaoRetorno(){
     }
     horaatual = hora + '' + horaatualminutos;
     
-    if(horaatual > horaprevinformada){
-        document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir a hora, pois a hora informada é menor que a hora atual!</b></style>";
-        document.getElementById("horaprevretorno").value = '';
-        document.getElementById("horaprevretorno").focus();
+    if(datadocampo == datadocamporetorno){
+    	if(horaprevsaidainformada >= horaprevinformada){
+    		document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "<div style='color: red; font-size: 12px;'><b>Não é possível inserir essa hora. A hora informada não pode ser menor que a hora de saída!</b></style>";
+	        document.getElementById("horaprevretorno").value = '';
+	        document.getElementById("horaprevretorno").focus();
+    	}else{
+    		document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "";
+    	}
     }else{
-        document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "";
+    	document.getElementById("mensagemhoraprevisaoretorno").innerHTML= "";
     }
 }

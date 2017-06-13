@@ -1,6 +1,6 @@
 <div class="col-md-12 col-offset-2">
     <div class="panel panel-primary">
-        <div class="panel-heading">Cadastrar Gerente</div>
+        <div class="panel-heading">Cadastro de Gerente</div>
         <div class="panel-body">
             <form action="<?php echo $acao; ?>" name="formGerente" id="formGerente" method="POST" class="form" role="form">
                 <div class="row">
@@ -44,13 +44,14 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="datanascimento">Data Nascimento</label>
-                        <input type="text" class="form-control" id="data" name="datanascimento" placeholder="Informe a Data de Nascimento" 
-                                       value="<?php if (isset($gerente)) echo $gerente['datanascimento']; ?>" required>
+                        <input type="text" class="form-control" id="data" name="datanascimento" placeholder="Informe a Data/Nascimento" 
+                               value="<?php if (isset($gerente)) echo $gerente['datanascimento']; ?>" onChange="maiorIdade()" required>
+                        <div id="maiordeidade"></div>
                     </div>
                     <div class="col-md-3">
                         <label for="cpf">CPF</label>
                         <input type="text" class="form-control" id="cpf_atualizado" name="cpf" placeholder="Informe o CPF" 
-                                       onkeypress="return Onlynumbers(event)" value="<?php if (isset($gerente)) echo $gerente['cpf']; ?>" required maxlength="14">
+                                       onkeypress="return Onlynumbers(event)" value="<?php if (isset($gerente)) echo $gerente['cpf']; ?>" required maxlength="14" >
                     </div>
                 </div>
                 <div class="row">
@@ -99,7 +100,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         <label for="email">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Digite o E-mail" 
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Digiteo E-mail" 
                                        value="<?php if (isset($gerente)) echo $gerente['email']; ?>">
                     </div>
                 </div>
@@ -111,7 +112,7 @@
                     </div>
                     <div class="col-md-3">
                         <label for="confirmasenha">Confirma Senha</label>
-                        <input type="password" class="form-control" attrname="confirmasenha" name="confirmasenha" placeholder="Confirme sua Senha" 
+                        <input type="password" class="form-control" attrname="confirmasenha" name="confirmasenha" placeholder="Confirma a Senha" 
                                onchange="verificarSenhas()" value="<?php if (isset($gerente)) echo $gerente['senha']; ?>">
                     </div>
                 </div>

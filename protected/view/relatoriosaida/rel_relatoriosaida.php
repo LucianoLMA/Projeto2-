@@ -32,16 +32,16 @@ if($in_idveiculo != "" && $in_cpf == "" && $in_datasaidafim == "" && $in_datasai
     //Filtro com CPF, Data Saida Inicio e Fim   
     $filtropesquisa = 'where u.cpf = ' . "'$in_cpf'" . ' and r.datasaida >= ' . "'$in_datasaidainicio'" . ' and r.datasaida <= ' . "'$in_datasaidafim'";
 }else if($in_idveiculo == null && $in_cpf == "" && $in_datasaidainicio != "" && $in_datasaidafim == ""){
-    //Somente Data Inicio   
+    //Se somente Data Inicio   
     $filtropesquisa = 'where r.datasaida >= ' . "'$in_datasaidainicio'";
 }else if($in_idveiculo == null && $in_cpf == "" && $in_datasaidainicio == "" && $in_datasaidafim != ""){
-    //Somente data Fim
+    //Se somente data Fim
     $filtropesquisa = 'where r.datasaida <= ' . "'$in_datasaidafim'";
 }else if($in_idveiculo == null && $in_cpf == "" && $in_datasaidainicio != "" && $in_datasaidafim != ""){
-    //Data Inicio e Data Fim
+    //Se data Inicio e Data Fim
     $filtropesquisa = 'where r.datasaida >= ' . "'$in_datasaidainicio'" . ' and r.datasaida <= ' . "'$in_datasaidafim'";
 }else if($in_idveiculo != null && $in_cpf != "" && $in_datasaidainicio == "" && $in_datasaidafim == ""){
-    //Veículo e CPF
+    //Se Veículo e CPF
     $filtropesquisa = 'where v.id = ' . "$in_idveiculo" . ' and u.cpf = ' . "'$in_cpf'";
 }else if($in_idveiculo != null && $in_cpf == "" && $in_datasaidainicio != "" && $in_datasaidafim == ""){
     //Filtro com Veículo e Data Saida Início
@@ -56,11 +56,11 @@ if($in_idveiculo != "" && $in_cpf == "" && $in_datasaidafim == "" && $in_datasai
 else if($in_idveiculo != null && $in_cpf != "" && $in_datasaidainicio != "" && $in_datasaidafim != ""){
     //Filtrar por todos os parâmetros
     $filtropesquisa = 'where v.id = ' . $in_idveiculo . ' and u.cpf = ' . "'$in_cpf'" . ' and r.datasaida >= ' . "'$in_datasaidainicio'" . " and r.datasaida <= " . "'$in_datasaidafim'";
-}
-else{
+}else{
   //Pesquisa por nenhum filtro
   $filtropesquisa = null;
 }
+//echo 'ok'; exit;
 
     $pdf = new FPDF("P", "pt", "A4");
 
@@ -83,10 +83,10 @@ else{
     //CABEÇALHO DA TABELA
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->setFillColor(180, 180, 180);
+    $pdf->Cell(80, 14, utf8_decode('Data/Hora Saída'), 1, 0, 'C', 1);
     $pdf->Cell(115, 14, utf8_decode('Nome'), 1, 0, 'L', 1);
     $pdf->Cell(70, 14, utf8_decode('CPF'), 1, 0, 'L', 1);
     $pdf->Cell(60, 14,  utf8_decode('Veículo'), 1, 0, 'L', 1);
-    $pdf->Cell(80, 14, utf8_decode('Data/Hora Saída'), 1, 0, 'C', 1);
     $pdf->Cell(50, 14,  utf8_decode('Km. Inicial'), 1, 0, 'C', 1);
     $pdf->Cell(50, 14,  utf8_decode('Km. Final'), 1, 0, 'C', 1);
     $pdf->Cell(100, 14, utf8_decode('Destino'), 1, 0, 'L', 1);
@@ -96,34 +96,53 @@ else{
 
     //DADOS DA TABELA
     $pdf->SetFont('Arial', '', 8);
-    $query = "select upper(u.nome) || ' ' || upper(u.sobrenome) as nomeusuario,
-                     u.cpf,
-                     upper(v.modelo) as modeloveiculo,
-                     to_char(r.datasaida, 'dd/MM/yyyy') || ' - ' ||  (r.horasaida) as datahorasaida,
-                     r.kminicial as kminicial,
-                     r.kmfinal as kmfinal,
-                     r.destino as destino,
-                     r.motivo as motivo,
-                     r.observacao as observacao
-                from reserva r
-               inner join reservacolaborador rc
-                  on rc.idreserva = r.id
-               inner join veiculo v
-                  on r.idveiculo = v.id
-               inner join colaborador c
-                  on rc.idcolaborador = c.id
-               inner join usuario u
-                  on c.idusuario = u.id
-                     $filtropesquisa
-               order by u.nome, r.datasaida asc";
+    $query = "select (to_char(r.datasaida, 'dd/MM/yyyy') || '-' || to_char(r.horasaida, 'HH24:mi')) as datahorasaida,
+                    r.kminicial as kminicial,
+                    r.kmfinal as kmfinal,
+                    r.destino as destino,
+                    r.motivo as motivo,
+                    r.observacao as observacao,
+                    upper(v.modelo) as modeloveiculo,
+                    (u.nome || ' ' || u.sobrenome) as nomeusuario,
+                    u.cpf as cpf
+               from reserva r
+              inner join veiculo v
+                 on r.idveiculo = v.id
+              inner join reservagerente rg
+                 on rg.idreserva = r.id
+              inner join usuario u
+                 on rg.idusuario = u.id
+                    $filtropesquisa
+                and r.datasaida is not null and r.horasaida is not null
+              union all
+              select (to_char(r.datasaida, 'dd/MM/yyyy') || '-' || to_char(r.horasaida, 'HH24:mi')) as datahorasaida,
+                    r.kminicial as kminicial,
+                    r.kmfinal as kmfinal,
+                    r.destino as destino,
+                    r.motivo as motivo,
+                    r.observacao as observacao,
+                    upper(v.modelo) as modeloveiculo,
+                    (u.nome || ' ' || u.sobrenome) as nomeusuario,
+                    u.cpf as cpf
+               from reserva r
+              inner join veiculo v
+                 on r.idveiculo = v.id
+              inner join reservacolaborador rc
+                 on rc.idreserva = r.id
+              inner join colaborador col
+                 on col.id = rc.idcolaborador
+              inner join usuario u
+                 on col.idusuario = u.id 
+                 $filtropesquisa
+                and r.datasaida is not null and r.horasaida is not null;";
     $result = pg_query($query);
     
     while ($consulta = pg_fetch_assoc($result)) {
         $pdf->SetFillColor(255, 255, 255);
+        $pdf->Cell(80, 12, utf8_decode($consulta['datahorasaida']), 1, 0, 'C', 1);
         $pdf->Cell(115, 12, utf8_decode($consulta['nomeusuario']), 1, 0, 'L', 1);
         $pdf->Cell(70, 12, '021.346.190-07', 1, 0, 'L', 1);
         $pdf->Cell(60, 12, utf8_decode($consulta['modeloveiculo']), 1, 0, 'L', 1);
-        $pdf->Cell(80, 12, utf8_decode($consulta['datahorasaida']), 1, 0, 'C', 1);
         $pdf->Cell(50, 12, $consulta['kminicial'], 1, 0, 'C', 1);
         $pdf->Cell(50, 12, $consulta['kmfinal'], 1, 0, 'C', 1);
         $pdf->Cell(100, 12, utf8_decode($consulta['destino']), 1, 0, 'L', 1);

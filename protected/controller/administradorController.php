@@ -1,16 +1,21 @@
 <?php
 
-class VeiculoController {
+class AdministradorController {
     private $bd, $model;
+    private $usuarioModel;
+    private $administradorModel;
     
     function __construct() {
-        require './protected/model/veiculoModel.php';
-        $this->model = new VeiculoModel();
+        require './protected/model/administradorModel.php';
+        require './protected/model/usuarioModel.php';
+        $this->model = new AdministradorModel();
+        $this->modelUsuario = new UsuarioModel();
     }
     
     public function novo() {
-        $acao = 'painel.php?controle=veiculoController&acao=inserir';
-        require './protected/view/veiculo/formVeiculo.php';
+        $listaUsuario  = $this->modelUsuario->buscarTodos();
+        $acao = 'painel.php?controle=administradorController&acao=inserir';
+        require './protected/view/administrador/formAdministrador.php';
     }
     
     public function inserir(array $dados) {
@@ -29,13 +34,14 @@ class VeiculoController {
     
     public function listar() {
         $listaDados = $this->model->buscarTodos();
-        require './protected/view/veiculo/listVeiculo.php';
+        require './protected/view/administrador/listAdministrador.php';
     }
     
     public function buscar($id) {
-        $veiculo = $this->model->buscar($id);
-        $acao = 'painel.php?controle=veiculoController&acao=atualizar';
-        require './protected/view/veiculo/formVeiculo.php';
+        $administrador   = $this->model->buscar($id);
+        $listaUsuario  = $this->modelUsuario->buscarTodos();
+        $acao = 'painel.php?controle=administradorController&acao=atualizar';
+        require './protected/view/administrador/formAdministrador.php';
     }
     
     public function atualizar(array $dados) {
@@ -60,7 +66,7 @@ class VeiculoController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não é possível excluir o Veículo, pois possui registros dependentes.
+                    Não é possível excluir o Administrador, pois possui registros dependentes.
                   </div>';
         }
         $this->listar();

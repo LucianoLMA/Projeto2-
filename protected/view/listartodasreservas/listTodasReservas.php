@@ -1,30 +1,30 @@
 <div id="fundo">
     <div class="col-md-12">
         <div class="panel panel-primary">
-            <div class="panel-heading">Relação de Saída de Veículo</div>
+            <div class="panel-heading">Relação de Todas as Reservas</div>
             <div class="table-responsive">
                 <table class="table" id="example1">
                     <thead>
-                        <th>Data</th>
-                        <th>Hora</th>
-                        <th>Placa</th>
-                        <th>Destino</th>
+                        <th>Data Hora Saída</th>
+                        <th>Data Hora Retorno</th>
+                        <th>Km Inicial</th>
+                        <th>Km Final</th>
                         <th>Motivo</th>
-                        <th>Condição</th>
-                        <th>Km. Final</th>
+                        <th>Destino</th>
+                        <th>Observação</th>
                         <th>Status</th>
                     </thead>
                     <tbody>
                         <?php
                         foreach ($listaDados as $item) {
                             echo '<tr>';
-                            echo '<td style="padding-left: 12px;">' . $item['datasaida'];
-                            echo '<td style="padding-left: 12px;">' . substr($item['horasaida'], 0, -3);
-                            echo '<td>' . $item['placa'];
-                            echo '<td>' . $item['destino'];
-                            echo '<td>' . $item['motivo'];
-                            echo '<td>' . $item['descricao'];
+                            echo '<td>' . $item['datahorasaida'];
+                            echo '<td>' . $item['datahoraretorno'];
+                            echo '<td>' . $item['kminicial'];
                             echo '<td>' . $item['kmfinal'];
+                            echo '<td>' . $item['motivo'];
+                            echo '<td>' . $item['destino'];
+                            echo '<td>' . $item['observacao'];
                             if($item['status'] == 1){
                                 echo '<td style="padding-top: 5px;"><span class="label label-warning">RESERVADO</span></td>';;
                             }else if($item['status'] == 2){

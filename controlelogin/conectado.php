@@ -10,8 +10,9 @@
     if (pg_num_rows($result) > 0) {
             $_SESSION['cpf'] = $cpf;
             $_SESSION['senha'] = $senha;
+            include("naocompareceureserva.php");
             header('location:../painel.php');
-
+            
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['senha']);

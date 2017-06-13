@@ -66,7 +66,7 @@ class CidadeController {
                   </div>';
         }else{
             echo '<div class="alert alert-danger">
-                    Não foi possível excluir a Cidade!
+                    Não é possível excluir a Cidade, pois possui registros dependentes.
                   </div>';
         }
         $this->listar();
